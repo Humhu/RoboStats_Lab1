@@ -1,3 +1,5 @@
+#ifndef _DUMMY_H_
+#define _DUMMY_H_
 
 namespace rspf {
 
@@ -8,3 +10,5 @@ namespace rspf {
     };
     
 }
+
+#endif _DUMMY_H_
