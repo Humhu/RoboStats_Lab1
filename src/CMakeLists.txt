@@ -1,7 +1,8 @@
 #CMake file for src folder
 
 set( RSPF_particlefilter_SOURCES
-     Dummy.cpp )
+     Dummy.cpp 
+     Particle.cpp )
 
 add_library( RSPF_particlefilter SHARED ${RSPF_particlefilter_SOURCES} )
 
