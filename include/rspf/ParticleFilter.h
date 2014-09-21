@@ -18,7 +18,7 @@ namespace rspf {
 		
     private: 
 		std::vector<Particle> particleSet;
-		TransitionModel transitionModel;
+		TransitionModel* transitionModel;
 		
     }; // class
     
