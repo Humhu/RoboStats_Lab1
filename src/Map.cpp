@@ -63,6 +63,10 @@ namespace rspf {
         return map.cols;
     }
 
+    const Map::MapType& Map::GetMap() const {
+        return map;
+    }
+    
     double Map::GetValue( double x, double y ) const {
         if( x < 0 || x > GetXSize() || y < 0 || y > GetYSize() ) {
             throw std::out_of_range( "Position exceeds map size." );

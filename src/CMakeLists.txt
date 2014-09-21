@@ -2,6 +2,7 @@
 
 set( RSPF_particlefilter_SOURCES
      Dummy.cpp
+     FilterVisualizer.cpp
      Map.cpp
      PoseSE2.cpp
      RobotLogReader.cpp )

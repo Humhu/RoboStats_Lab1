@@ -8,6 +8,8 @@ namespace rspf {
     class Map {
     public:
 
+        typedef cv::Mat MapType;
+        
         /*! \brief Reads a formatted map from a file. */
         Map( const std::string& filename );
 
@@ -17,9 +19,11 @@ namespace rspf {
         /*! \brief Returns the map value at (x,y). Rounds indices. */
         double GetValue( double x, double y ) const;
 
+        const MapType& GetMap() const;
+        
     protected:
 
-        cv::Mat map;
+        MapType map;
         
     };
     

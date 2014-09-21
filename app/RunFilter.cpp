@@ -1,5 +1,6 @@
 #include "rspf/Map.h"
 #include "rspf/RobotLogReader.h"
+#include "rspf/FilterVisualizer.h"
 
 #include <iostream>
 
@@ -15,6 +16,10 @@ int main( int argc, char* argv[] ) {
 
     rspf::Map map( mapFilename );
 
+    // ParticleFilter pf;
+    //rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
+    // vis.Update();
+    
     std::string logFilename( argv[2] );
     std::cout << "Reading log at: " << logFilename << std::endl;
 
