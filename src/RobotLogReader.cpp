@@ -11,17 +11,19 @@ namespace rspf {
         hasScan( false ),
         points() {}
 
-    SensorData::SensorData( const PoseSE2& disp, double time,
-                            const std::array<double, ScanSize>& pts ) :
+    SensorData::SensorData( const PoseSE2& disp, double time, const std::array<double, ScanSize>& pts,
+                            const PoseSE2& laserOff ) :
         displacement( disp ),
         timestamp( time ),
         hasScan( true ),
-        points( pts ) {}
+        points( pts ),
+        laserOffset( laserOff ) {}
 
     std::ostream& operator<<( std::ostream& os, const SensorData& data ) {
         os << "Displacement: " << data.displacement << " t: " << data.timestamp;
         if( data.hasScan ) {
-            os << " Scan:";
+            os << "Laser Offset: " << data.laserOffset
+               << " Scan:";
             for( unsigned int i = 0; i < SensorData::ScanSize; i++ ) {
                 os << " " << data.points[i];
             }
@@ -76,12 +78,19 @@ namespace rspf {
         else if( tokens[0] == "L" ) {
 
             double time = boost::lexical_cast<double>( tokens[187] );
+
+            double lx = boost::lexical_cast<double>( tokens[4] );
+            double ly = boost::lexical_cast<double>( tokens[5] );
+            double lth = boost::lexical_cast<double>( tokens[6] );
+            PoseSE2 laserPose( lx, ly, lth );
+            PoseSE2 laserOffset = pos.Inverse() * laserPose;
+            
             SensorData::Scan points;
             for( unsigned int i = 0; i < SensorData::ScanSize; i++ ) {
                 points[i] = boost::lexical_cast<double>( tokens[7 + i] );
             }
 
-            SensorData data( displacement, time, points );
+            SensorData data( displacement, time, points, laserOffset );
             return data;
         }
         else {

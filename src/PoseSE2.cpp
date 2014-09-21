@@ -19,6 +19,7 @@ namespace rspf {
 
     PoseSE2::PoseSE2( const Matrix& m ) :
         trans( m ) {}
+        
 
     // TODO Remove this because of inaccuracy!
     PoseSE2::PoseSE2( const Transform &t ) :

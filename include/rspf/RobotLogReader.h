@@ -5,21 +5,29 @@
 
 #include <fstream>
 #include <array>
+#include <math.h>
 
 namespace rspf {
 
-    // NOTE Units are mm and radians
+    // NOTE Convention is x-forward, left-y robot frame
+    // NOTE Units are cm and radians
     struct SensorData {
         static const unsigned int ScanSize = 180;
-        typedef std::array<double, ScanSize> Scan;
+        static constexpr double StartAngle = -M_PI/2.0;
+        static constexpr double EndAngle = M_PI/2.0;
+        static constexpr double ScanResolution = M_PI/ScanSize;
         
+        typedef std::array<double, ScanSize> Scan;
+
         const PoseSE2 displacement;
         const double timestamp;
         const bool hasScan;
         const Scan points;
+        const PoseSE2 laserOffset; // Offset of laser in robot frame
 
         SensorData( const PoseSE2& disp, double time );
-        SensorData( const PoseSE2& disp, double time, const Scan& pts );
+        SensorData( const PoseSE2& disp, double time,
+                    const Scan& pts, const PoseSE2& laserOff );
     };
 
     std::ostream& operator<<( std::ostream& os, const SensorData& data );
