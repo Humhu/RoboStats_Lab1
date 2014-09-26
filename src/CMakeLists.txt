@@ -1,8 +1,16 @@
 #CMake file for src folder
 
 set( RSPF_particlefilter_SOURCES
-     Dummy.cpp 
-     Particle.cpp )
+     Dummy.cpp
+     FilterVisualizer.cpp
+     Map.cpp
+     PoseSE2.cpp
+     RobotLogReader.cpp
+     Particle.cpp 
+     TransitionModel.cpp
+     StaticTransitionModel.cpp
+     )
+
 
 add_library( RSPF_particlefilter SHARED ${RSPF_particlefilter_SOURCES} )
 

@@ -1,5 +1,5 @@
 # CMake root for RoboStats particle filter lab
-# Ellen Cappo, Humphrey Hu, Siddarth Swaminathan
+# Ellen Cappo, Humphrey Hu
 
 # RoboStats Particle Filter
 project( RSPF )
@@ -23,10 +23,17 @@ add_definitions( -Wall -std=c++0x )
 
 # Find packages we will be using
 
+# OpenCV for display
+find_package( OpenCV 2 REQUIRED
+    PATHS ~/Software/opencv/install )
+message( STATUS "OpenCV found at: ${OpenCV_INCLUDE_DIRS}" )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+list( APPEND RSPF_LIBRARIES ${OpenCV_LIBS} )
+
 # Eigen for linear algebra and matrices
 find_package( Eigen REQUIRED )
-message( STATUS "Eigen found at: ${Eigen_INCLUDE_DIRS}" )
-include_directories( ${Eigen_INCLUDE_DIRS} )
+message( STATUS "Eigen found at: ${EIGEN_INCLUDE_DIRS}" )
+include_directories( ${EIGEN_INCLUDE_DIRS} )
 
 # Threading and Boost utilities
 find_package( Threads REQUIRED )
@@ -41,5 +48,6 @@ include_directories( ${RSPF_INCLUDE_DIRECTORIES} )
 
 add_subdirectory( src )
 
+add_subdirectory( app )
 
 

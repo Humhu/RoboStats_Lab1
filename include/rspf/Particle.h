@@ -1,25 +1,30 @@
 #ifndef PARTICLE_
 #define PARTICLE_
 
+#include "rspf/PoseSE2.h"
+
 namespace rspf {
 
     class Particle {
     public:
 		Particle(); //state x,y,theta
-		double getX();
-		double getY();
-		double getTheta();
+		PoseSE2 getPose();
+// 		double getX();
+// 		double getY();
+// 		double getTheta();
 		double getW();
-    
-		void setX( double x );
-		void setY( double x );
-		void setTheta( double x );
+//     
+// 		void setPose( PoseSE2 x );
+// 		void setX( double x );
+// 		void setY( double x );
+// 		void setTheta( double x );
 		void setW( double x );
 		
     private: 
-		double x;
-		double y;
-		double theta;
+		PoseSE2 pose;
+// 		double x;
+// 		double y;
+// 		double theta;
 		double w; //weight
 		
     }; // class
