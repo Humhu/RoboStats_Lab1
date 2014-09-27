@@ -6,7 +6,7 @@ namespace rspf {
 
     bool FilterVisualizer::windowThreadInitialized = false;
 
-    FilterVisualizer::FilterVisualizer( const ParticleFilter& _filter, const Map& _map,
+    FilterVisualizer::FilterVisualizer( ParticleFilter& _filter, const Map& _map,
                                         const std::string& _windowName ) :
         filter( _filter ),
         map( _map ),
@@ -22,7 +22,7 @@ namespace rspf {
         cv::namedWindow( windowName, CV_WINDOW_AUTOSIZE );
 
         // Read map image
-        cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
+		 cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
         for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
             for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
                 double mapVal = map.GetValue( x, y );
@@ -40,30 +40,37 @@ namespace rspf {
             }
         }
 
-        cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
-                             std::round( map.GetYSize()*mapScale ) );
-        resize( temp, mapImage, scaledSize );
+		cv::imshow( windowName, temp );
+		sleep( 10 );
+        
+//         cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
+//                              std::round( map.GetYSize()*mapScale ) );
+// 		mapImage = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
+//  		mapImage = temp.clone();
+//         resize( temp, mapImage, scaledSize );
 
         // Create robot points
         
         
     }
-
+ 
     void FilterVisualizer::Update() {
 
         cv::Mat image = mapImage.clone();
 
         // Add things to the image here
         // TODO!
-        // std::vector<Particle> particles = filter.GetParticles();
-        // PlotRobotParticles( image, particles );
+        std::vector<Particle> particles = filter.GetParticles();
+		std::cout << "Read " << particles.size() << std::endl;
+		
+//         PlotRobotPoses( image, particles );
         
         cv::imshow( windowName, image );
     }
 
-    void FilterVisualizer::PlotRobotPoses( cv::Mat& img, const std::vector<PoseSE2>& poses ) {
+    void FilterVisualizer::PlotRobotPoses( cv::Mat& img, std::vector<Particle>& particles ) {
 
-        unsigned int numPoses = poses.size();
+        unsigned int numPoses = particles.size();
 
         // Untransformed triangle points
         Eigen::Vector2d tip;
@@ -81,7 +88,7 @@ namespace rspf {
         for( unsigned int i = 0; i < numPoses; i++ ) {
 
             // Transform the points using the poses
-            PoseSE2::Transform trans = poses[i].GetTransform();
+            PoseSE2::Transform trans = particles[i].getPose().GetTransform();
             trans.translation() = mapScale*trans.translation();
             Eigen::Vector2d tipTrans = trans*tip.colwise().homogeneous();
             Eigen::Vector2d leftTrans = trans*left.colwise().homogeneous();

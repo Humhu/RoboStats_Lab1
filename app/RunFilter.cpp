@@ -16,9 +16,13 @@ int main( int argc, char* argv[] ) {
 
     rspf::Map map( mapFilename );
 
-    // ParticleFilter pf;
-    //rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
-    // vis.Update();
+    rspf::ParticleFilter pf;
+	std::cout << "made a particle filter. nyah." << std::endl;
+
+    rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
+	std::cout << "Made the visualizer." << std::endl;
+	
+    vis.Update();
     
     std::string logFilename( argv[2] );
     std::cout << "Reading log at: " << logFilename << std::endl;

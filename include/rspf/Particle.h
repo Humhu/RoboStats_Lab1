@@ -14,7 +14,7 @@ namespace rspf {
 // 		double getTheta();
 		double getW();
 //     
-// 		void setPose( PoseSE2 x );
+ 		void setPose( PoseSE2 x );
 // 		void setX( double x );
 // 		void setY( double x );
 // 		void setTheta( double x );
