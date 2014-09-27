@@ -11,7 +11,8 @@ namespace rspf {
         filter( _filter ),
         map( _map ),
         windowName( _windowName ),
-        mapScale( 1.5 ) {
+        mapScale( 1.0 ),
+        robotSize( 10.0 ) {
 
         if( !windowThreadInitialized ) {
             windowThreadInitialized = true;
@@ -28,26 +29,27 @@ namespace rspf {
                 double mapVal = map.GetValue( x, y );
 
                 if( mapVal == -1.0 ) {
-                    temp.at<unsigned char>(x, y, 0) = 0;
-                    temp.at<unsigned char>(x, y, 1) = 0;
-                    temp.at<unsigned char>(x, y, 2) = 0;
+                    temp.at<cv::Vec3b>(x, y)[0] = 0;
+					temp.at<cv::Vec3b>(x, y)[1] = 0;
+					temp.at<cv::Vec3b>(x, y)[2] = 0;
                 }
                 else {
-                    temp.at<unsigned char>(x, y, 0) = 255*mapVal;
-                    temp.at<unsigned char>(x, y, 0) = 255*mapVal;
-                    temp.at<unsigned char>(x, y, 0) = 255*mapVal;
+                    temp.at<cv::Vec3b>(x, y)[0] = 255*mapVal;
+					temp.at<cv::Vec3b>(x, y)[1] = 255*mapVal;
+					temp.at<cv::Vec3b>(x, y)[2] = 255*mapVal;
                 }
             }
         }
 
-		cv::imshow( windowName, temp );
-		sleep( 10 );
+// 		cv::imshow( windowName, temp );
+// 		sleep( 10 );
         
-//         cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
-//                              std::round( map.GetYSize()*mapScale ) );
-// 		mapImage = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
-//  		mapImage = temp.clone();
-//         resize( temp, mapImage, scaledSize );
+        cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
+                             std::round( map.GetYSize()*mapScale ) );
+		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
+		resize( temp, resizeTemp, scaledSize );
+		
+  		mapImage = resizeTemp.clone();
 
         // Create robot points
         
@@ -61,9 +63,8 @@ namespace rspf {
         // Add things to the image here
         // TODO!
         std::vector<Particle> particles = filter.GetParticles();
-		std::cout << "Read " << particles.size() << std::endl;
 		
-//         PlotRobotPoses( image, particles );
+        PlotRobotPoses( image, particles );
         
         cv::imshow( windowName, image );
     }

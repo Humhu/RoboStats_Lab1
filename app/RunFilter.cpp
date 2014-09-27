@@ -21,16 +21,19 @@ int main( int argc, char* argv[] ) {
 
     rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
 	std::cout << "Made the visualizer." << std::endl;
-	
-    vis.Update();
-    
+	    
     std::string logFilename( argv[2] );
     std::cout << "Reading log at: " << logFilename << std::endl;
 
     rspf::RobotLogReader log( logFilename );
     while( log.HasData() ) {
         rspf::SensorData data = log.GetNextData();
-        std::cout << "Read: " << data << std::endl;
+
+		//         std::cout << "Read: " << data << std::endl;
+		// TODO Run the PF!
+
+		vis.Update();
+		
     }
     
     return 0;

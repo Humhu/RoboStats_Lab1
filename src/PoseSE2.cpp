@@ -8,7 +8,7 @@ namespace rspf {
 
     PoseSE2::PoseSE2(const double x, const double y, const double theta) {
         Rotation rot( theta );
-        Translation zero( 0, 0, 0 );
+        Translation zero( 0, 0 );
         Translation lin( x, y );
 
         // Need this step for the transform composition to be valid
