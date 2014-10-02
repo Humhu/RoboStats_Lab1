@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
@@ -34,6 +35,7 @@ namespace rspf {
             }
         }
 
+        // CV_64F corresponds to double
         map = cv::Mat::zeros( xdim, ydim, CV_64F );
         
         // Now all following lines are data
@@ -49,8 +51,8 @@ namespace rspf {
             }
 
             for( unsigned int i = 0; i < xdim; i++ ) {
-                double value = boost::lexical_cast<double>( tokens[i] );
-                map.at<double>(i,j) = value;
+				CellType value = boost::lexical_cast<CellType>( tokens[i] );
+				map.at<CellType>(i,j) = value;
             }
         }
     }
@@ -67,15 +69,19 @@ namespace rspf {
         return map;
     }
     
-    double Map::GetValue( double x, double y ) const {
-        if( x < 0 || x > GetXSize() || y < 0 || y > GetYSize() ) {
-            throw std::out_of_range( "Position exceeds map size." );
-        }
-
+    Map::CellType Map::GetValue( double x, double y ) const {
         unsigned int xRounded = std::round( x );
         unsigned int yRounded = std::round( y );
+		return GetValue( xRounded, yRounded );
+	}
 
-        return map.at<double>( xRounded, yRounded );
+	Map::CellType Map::GetValue( unsigned int x, unsigned int y ) const {
+		if( x < 0 || x > GetXSize() || y < 0 || y > GetYSize() ) {
+			std::stringstream ss;
+			ss << "Position (" << x << ", " << y << ") exceeds map size!";
+			throw std::out_of_range( ss.str() );
+		}
+        return map.at<CellType>( x, y );
     }
 
 }

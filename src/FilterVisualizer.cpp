@@ -11,7 +11,7 @@ namespace rspf {
         filter( _filter ),
         map( _map ),
         windowName( _windowName ),
-        mapScale( 1.0 ),
+        mapScale( 1.0 ), // TODO Take as argument
         robotSize( 10.0 ) {
 
         if( !windowThreadInitialized ) {
@@ -40,9 +40,6 @@ namespace rspf {
                 }
             }
         }
-
-// 		cv::imshow( windowName, temp );
-// 		sleep( 10 );
         
         cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
                              std::round( map.GetYSize()*mapScale ) );
@@ -50,9 +47,6 @@ namespace rspf {
 		resize( temp, resizeTemp, scaledSize );
 		
   		mapImage = resizeTemp.clone();
-
-        // Create robot points
-        
         
     }
  
