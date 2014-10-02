@@ -9,7 +9,9 @@ set( RSPF_particlefilter_SOURCES
 	 RandomDistributions.cpp
 	 RobotLogReader.cpp 
 	 StaticTransitionModel.cpp
+	 SynchronizationPrimitives.cpp
      TransitionModel.cpp
+     WorkerPool.cpp
      )
 
 

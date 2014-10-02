@@ -42,6 +42,7 @@ list( APPEND RSPF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT} )
 find_package( Boost REQUIRED )
 include_directories( ${Boost_INCLUDE_DIRS} )
 list( APPEND RSPF_LIBRARIES ${Boost_LIBRARIES} )
+list( APPEND RSPF_LIBRARIES "-lboost_thread" ) # Need to force linking against threads
 
 set( RSPF_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/include" )
 include_directories( ${RSPF_INCLUDE_DIRECTORIES} )
