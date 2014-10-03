@@ -14,41 +14,57 @@ namespace rspf {
         mapScale( 1.0 ), // TODO Take as argument
         robotSize( 10.0 ) {
 
-        if( !windowThreadInitialized ) {
-            windowThreadInitialized = true;
-            cv::startWindowThread();
-        }
+		Initialize();
+    }
 
-        // Initialize window
-        cv::namedWindow( windowName, CV_WINDOW_AUTOSIZE );
+    FilterVisualizer::FilterVisualizer( ParticleFilter& _filter, const Map& _map,
+										const PropertyTree& ptree ) :
+		filter( _filter ),
+		map( _map ),
+		windowName( ptree.get_child("visualizer").get<std::string>("window_name") ),
+		mapScale( ptree.get_child("visualizer").get<double>("map_scale") ),
+		robotSize( ptree.get_child("visualizer").get<double>("robot_size") ) {
 
-        // Read map image
-		 cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
-        for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
-            for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
-                double mapVal = map.GetValue( x, y );
+		Initialize();
+	}
 
-                if( mapVal == -1.0 ) {
-                    temp.at<cv::Vec3b>(x, y)[0] = 0;
+    void FilterVisualizer::Initialize() {
+
+		// TODO Possible race condition here if parallelized construction
+		if( !windowThreadInitialized ) {
+			windowThreadInitialized = true;
+			cv::startWindowThread();
+		}
+		
+		// Initialize window
+		cv::namedWindow( windowName, CV_WINDOW_AUTOSIZE );
+		
+		// Read map image
+		cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
+		for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
+			for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
+				double mapVal = map.GetValue( x, y );
+				
+				if( mapVal == -1.0 ) {
+					temp.at<cv::Vec3b>(x, y)[0] = 0;
 					temp.at<cv::Vec3b>(x, y)[1] = 0;
 					temp.at<cv::Vec3b>(x, y)[2] = 0;
-                }
-                else {
-                    temp.at<cv::Vec3b>(x, y)[0] = 255*mapVal;
+				}
+				else {
+					temp.at<cv::Vec3b>(x, y)[0] = 255*mapVal;
 					temp.at<cv::Vec3b>(x, y)[1] = 255*mapVal;
 					temp.at<cv::Vec3b>(x, y)[2] = 255*mapVal;
-                }
-            }
-        }
-        
-        cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
-                             std::round( map.GetYSize()*mapScale ) );
+				}
+			}
+		}
+		
+		cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
+							 std::round( map.GetYSize()*mapScale ) );
 		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
 		resize( temp, resizeTemp, scaledSize );
 		
-  		mapImage = resizeTemp.clone();
-        
-    }
+		mapImage = resizeTemp.clone();
+	}
  
     void FilterVisualizer::Update() {
 

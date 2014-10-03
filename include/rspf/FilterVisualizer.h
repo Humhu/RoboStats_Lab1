@@ -4,6 +4,7 @@
 #include "rspf/Map.h"
 #include "rspf/ParticleFilter.h"
 #include "rspf/PoseSE2.h"
+#include "rspf/Parameterized.h"
 
 #include <opencv2/highgui/highgui.hpp>
 
@@ -13,7 +14,8 @@ namespace rspf {
     public:
 
         FilterVisualizer( ParticleFilter& filter, const Map& map, const std::string& windowName );
-
+		FilterVisualizer( ParticleFilter& filter, const Map& map, const PropertyTree& ptree );
+		
         void Update();
         
     protected:
@@ -29,6 +31,8 @@ namespace rspf {
         
         static bool windowThreadInitialized;
 
+		void Initialize();
+		
         // TODO Make vector of Particle instead
         void PlotRobotPoses( cv::Mat& img, std::vector<Particle>& poses );
     };
