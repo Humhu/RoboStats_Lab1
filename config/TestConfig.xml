@@ -1,0 +1,16 @@
+<robot_log_path></robot_log_path>
+
+<particle_filter>
+	<sensor_model>gaussian</sensor_model>
+	<transition_model>
+		<type>gaussian</type>
+		<covariance>
+			1 0 0
+			0 1 0
+			0 0 1
+		</covariance>
+	</transition_model>
+	<resampler>standard</resampler>
+	
+	<num_particles>1000</num_particles>
+</particle_filter>

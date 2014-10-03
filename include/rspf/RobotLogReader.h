@@ -2,6 +2,7 @@
 #define _ROBOT_LOG_READER_H_
 
 #include "rspf/PoseSE2.h"
+#include "rspf/Parameterized.h"
 
 #include <fstream>
 #include <array>
@@ -38,6 +39,9 @@ namespace rspf {
         /*! \brief Opens the specified file for log reading. */
         RobotLogReader( const std::string& filename );
 
+		/*! \brief Parses a ptree to find the filepath. */
+		RobotLogReader( const PropertyTree& ptree );
+
         /*! \brief Returns if there is more data. */
         bool HasData() const;
         
@@ -49,8 +53,11 @@ namespace rspf {
         bool positionInitialized;
         PoseSE2 lastPosition;
         std::string currentLine;
-        
+
+		std::string logPath;
         std::ifstream logFile;
+
+		void Initialize();
 
     };
     

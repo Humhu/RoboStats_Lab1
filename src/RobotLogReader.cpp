@@ -33,15 +33,27 @@ namespace rspf {
         
     
     RobotLogReader::RobotLogReader( const std::string& filename ) :
-        positionInitialized( false ), logFile( filename ) {
+        positionInitialized( false ), logPath( filename ) {
 
-        if( !logFile.is_open() ) {
-            throw std::runtime_error( "Could not open log: " + filename );
-        }
-
-        getline( logFile, currentLine );
+        Initialize();
     }
 
+	RobotLogReader::RobotLogReader( const PropertyTree& ptree ) :
+		positionInitialized( false ),
+		logPath( ptree.get_child("log_reader").get<std::string>("log_path") ) {
+
+		Initialize();
+	}
+
+	void RobotLogReader::Initialize() {
+		logFile.open( logPath );
+		if( !logFile.is_open() ) {
+			throw std::runtime_error( "Could not open log: " + logPath );
+		}
+		
+		getline( logFile, currentLine );
+	}
+    
     bool RobotLogReader::HasData() const {
         return currentLine.find_first_not_of(' ') != std::string::npos;
     }

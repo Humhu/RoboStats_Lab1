@@ -3,6 +3,7 @@
 set( RSPF_particlefilter_SOURCES
      FilterVisualizer.cpp
      Map.cpp
+     Parameterized.cpp
      Particle.cpp 
      ParticleFilter.cpp
 	 PoseSE2.cpp

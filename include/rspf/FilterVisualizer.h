@@ -9,9 +9,6 @@
 
 namespace rspf {
 
-    // TODO Remove once ParticleFilter is in the master branch
-    class ParticleFilter;
-    
     class FilterVisualizer {
     public:
 
