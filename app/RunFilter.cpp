@@ -16,7 +16,7 @@ int main( int argc, char* argv[] ) {
 
     rspf::Map map( mapFilename );
 
-    rspf::ParticleFilter pf;
+    rspf::ParticleFilter pf( map );
 	std::cout << "made a particle filter. nyah." << std::endl;
 
     rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
@@ -31,6 +31,10 @@ int main( int argc, char* argv[] ) {
 
 		//         std::cout << "Read: " << data << std::endl;
 		// TODO Run the PF!
+		
+		// apply update from data to particles in the pf
+		pf.handleData(data);
+		
 
 		vis.Update();
 		

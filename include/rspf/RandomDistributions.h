@@ -21,7 +21,7 @@ namespace rspf {
 	protected:
 
 		typedef S ScalarType;
-		typedef boost::taus88 RandEngine;
+		typedef boost::mt19937 RandEngine;
 		typedef Generator GeneratorType;
 		typedef boost::variate_generator<RandEngine&, GeneratorType> RandAdapter;
 

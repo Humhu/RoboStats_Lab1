@@ -105,14 +105,14 @@ namespace rspf {
             Eigen::Vector2d leftTrans = trans*left.colwise().homogeneous();
             Eigen::Vector2d rightTrans = trans*right.colwise().homogeneous();
 
-            points[i][0] = cv::Point( tipTrans(0), tipTrans(1) );
-            points[i][1] = cv::Point( leftTrans(0), leftTrans(1) );
-            points[i][2] = cv::Point( rightTrans(0), rightTrans(1) );
+            points[i][0] = cv::Point( tipTrans(1), tipTrans(0) );
+            points[i][1] = cv::Point( leftTrans(1), leftTrans(0) );
+            points[i][2] = cv::Point( rightTrans(1), rightTrans(0) );
             shapes[i] = points[i];
             numPoints[i] = 3;
         }
 
-        cv::fillPoly( img, shapes, numPoints, 3, CV_RGB( 255, 0, 0 ), 8 );
+        cv::fillPoly( img, shapes, numPoints, numPoses, CV_RGB( 255, 0, 0 ), 8 );
     }
 
     

@@ -33,14 +33,15 @@ namespace rspf {
         
     
     RobotLogReader::RobotLogReader( const std::string& filename ) :
-        positionInitialized( false ), logPath( filename ) {
+        positionInitialized( false ), logPath( filename ), scale( 0.1 ) {
 
         Initialize();
     }
 
 	RobotLogReader::RobotLogReader( const PropertyTree& ptree ) :
 		positionInitialized( false ),
-		logPath( ptree.get_child("log_reader").get<std::string>("log_path") ) {
+		logPath( ptree.get_child("log_reader").get<std::string>("log_path") ),
+		scale( ptree.get_child("log_reader").get<double>("scale") ) {
 
 		Initialize();
 	}
@@ -66,8 +67,8 @@ namespace rspf {
         // After we've split we can get the next line
         getline( logFile, currentLine );
         
-        double x = boost::lexical_cast<double>( tokens[1] );
-        double y = boost::lexical_cast<double>( tokens[2] );
+        double x = scale*boost::lexical_cast<double>( tokens[1] );
+        double y = scale*boost::lexical_cast<double>( tokens[2] );
         double th = boost::lexical_cast<double>( tokens[3] );
         PoseSE2 pos( x, y, th );
 

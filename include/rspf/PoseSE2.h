@@ -28,6 +28,9 @@ namespace rspf {
         Transform GetTransform() const;
         Vector ToVector() const;
         PoseSE2 Inverse() const;
+		double getX() const;
+		double getY() const;
+		double getTheta() const;
 
         PoseSE2 operator*( const PoseSE2& other ) const;
         PoseSE2 operator/( const PoseSE2& other ) const;

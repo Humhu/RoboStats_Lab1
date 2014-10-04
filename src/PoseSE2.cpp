@@ -42,7 +42,26 @@ namespace rspf {
         ret << lin(0), lin(1), rot.angle();
         return ret;
     }
-
+    
+    
+   /*		double getX() const;
+		double getY() const;
+		double getTheta() const;*/
+	double PoseSE2::getX() const {
+		Transform::ConstTranslationPart lin = trans.translation();
+		return lin(0);
+	}
+	double PoseSE2::getY() const {
+		Transform::ConstTranslationPart lin = trans.translation();
+		return lin(1);
+	}   
+	double PoseSE2::getTheta() const {
+        Rotation rot(0);
+        rot.fromRotationMatrix( trans.linear() );
+		return rot.angle();
+	}   
+   
+   
     PoseSE2 PoseSE2::Inverse() const {
         return PoseSE2( trans.inverse() );
     }

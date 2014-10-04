@@ -9,7 +9,7 @@ namespace rspf {
 	}
 
 	void UniformDistribution::SetBounds( double lower, double upper ) {
-		if( lower <= upper ) {
+		if( lower >= upper ) {
 			std::stringstream ss;
 			ss << "Lower bound " << lower << " is less than upper bound " << upper;
 			throw std::logic_error( ss.str() );

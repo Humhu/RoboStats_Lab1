@@ -51,6 +51,7 @@ namespace rspf {
     protected:
 
         bool positionInitialized;
+		double scale; // Scale for translations
         PoseSE2 lastPosition;
         std::string currentLine;
 

@@ -22,7 +22,7 @@ namespace rspf {
         unsigned int GetYSize() const;
         
         /*! \brief Returns the map value at (x,y). Double version rounds the indices. */
-		Map::CellType GetValue( unsigned int x, unsigned int y ) const;
+	 	Map::CellType GetValue( unsigned int x, unsigned int y ) const;
         Map::CellType GetValue( double x, double y ) const;
 
         const MapType& GetMap() const;
