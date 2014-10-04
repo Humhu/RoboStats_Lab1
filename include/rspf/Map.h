@@ -3,6 +3,8 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "rspf/Parameterized.h"
+
 namespace rspf {
 
 	/*! \class Map Map.h
@@ -17,6 +19,7 @@ namespace rspf {
 		
         /*! \brief Reads a formatted map from a file. */
         Map( const std::string& filename );
+		Map( const PropertyTree& ptree );
 
         unsigned int GetXSize() const;
         unsigned int GetYSize() const;
@@ -30,6 +33,8 @@ namespace rspf {
     protected:
 
         MapType map;
+
+		void Initialize( const std::string& filename );
         
     };
     

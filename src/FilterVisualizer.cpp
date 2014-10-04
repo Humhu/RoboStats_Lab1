@@ -21,9 +21,9 @@ namespace rspf {
 										const PropertyTree& ptree ) :
 		filter( _filter ),
 		map( _map ),
-		windowName( ptree.get_child("visualizer").get<std::string>("window_name") ),
-		mapScale( ptree.get_child("visualizer").get<double>("map_scale") ),
-		robotSize( ptree.get_child("visualizer").get<double>("robot_size") ) {
+		windowName( ptree.get<std::string>("window_name") ),
+		mapScale( ptree.get<double>("map_scale") ),
+		robotSize( ptree.get<double>("robot_size") ) {
 
 		Initialize();
 	}

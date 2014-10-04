@@ -8,6 +8,12 @@ namespace rspf {
 		SetBounds( lower, upper );
 	}
 
+	UniformDistribution::UniformDistribution( const PropertyTree& ptree ) {
+		double lower = ptree.get<double>("lower_bound");
+		double upper = ptree.get<double>("upper_bound");
+		SetBounds( lower, upper );
+	}
+
 	void UniformDistribution::SetBounds( double lower, double upper ) {
 		if( lower >= upper ) {
 			std::stringstream ss;
@@ -36,6 +42,11 @@ namespace rspf {
 	NormalDistribution::NormalDistribution( double _mean, double variance ) {
 		SetMean( _mean );
 		SetVariance( variance );
+	}
+
+	NormalDistribution::NormalDistribution( const PropertyTree& ptree ) {
+		SetMean( ptree.get<double>("mean") );
+		SetVariance( ptree.get<double>("variance") );
 	}
 
 	void NormalDistribution::SetMean( double _mean ) {

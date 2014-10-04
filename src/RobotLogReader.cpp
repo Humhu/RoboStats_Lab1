@@ -40,8 +40,8 @@ namespace rspf {
 
 	RobotLogReader::RobotLogReader( const PropertyTree& ptree ) :
 		positionInitialized( false ),
-		logPath( ptree.get_child("log_reader").get<std::string>("log_path") ),
-		scale( ptree.get_child("log_reader").get<double>("scale") ) {
+		logPath( ptree.get<std::string>("log_path") ),
+		scale( ptree.get<double>("scale") ) {
 
 		Initialize();
 	}

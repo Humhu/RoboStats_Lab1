@@ -10,7 +10,15 @@
 namespace rspf {
 
     Map::Map( const std::string& filename ) {
+		Initialize( filename );
+	}
 
+	Map::Map( const PropertyTree& ptree ) {
+		Initialize( ptree.get<std::string>( "map_path" ) );
+	}
+
+	void Map::Initialize( const std::string& filename ) {
+		
         // Attempt to open the file
         std::ifstream filestream( filename );
         if( !filestream.is_open() ) {

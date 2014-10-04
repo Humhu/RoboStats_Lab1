@@ -5,6 +5,8 @@
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/uniform_01.hpp>
 
+#include "rspf/Parameterized.h"
+
 namespace rspf {
 
 	template < class Generator, class S = double >
@@ -39,6 +41,7 @@ namespace rspf {
 	public:
 
 		UniformDistribution( double lower, double upper );
+		UniformDistribution( const PropertyTree& ptree );
 
 		void SetBounds( double lower, double upper );
 		double GetLowerBound() const;
@@ -60,6 +63,7 @@ namespace rspf {
 	public:
 
 		NormalDistribution( double _mean, double variance );
+		NormalDistribution( const PropertyTree& ptree );
 
 		void SetMean( double _mean );
 		void SetVariance( double variance );
