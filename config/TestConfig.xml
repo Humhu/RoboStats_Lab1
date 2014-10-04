@@ -10,21 +10,19 @@
 <particle_filter>
 	<sensor_model>gaussian</sensor_model>
 	<transition_model>
-		<type>gaussian</type>
-		<covariance>
-			1 0 0
-			0 1 0
-			0 0 1
-		</covariance>
+		<type>default</type>
+		<var_x>1.0</var_x>
+		<var_y>1.0</var_y>
+		<var_t>1.0</var_t>
 	</transition_model>
 	<resampler>standard</resampler>
 	
-	<num_particles>10000</num_particles>
+	<num_particles>1000</num_particles>
 </particle_filter>
 
 <filter_visualizer>
 	<window_name>Filter Visualizer</window_name>
 	<map_scale>1.0</map_scale>
 	<robot_size>10.0</robot_size>
-	<particle_subsample>100</particle_subsample>
+	<particle_subsample>1</particle_subsample>
 </filter_visualizer>

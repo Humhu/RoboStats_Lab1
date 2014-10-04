@@ -4,6 +4,9 @@ namespace rspf {
 
     StaticTransitionModel::StaticTransitionModel() {}
 		
-	void StaticTransitionModel::transitionParticle( Particle _xin ) {}	
+	void StaticTransitionModel::transitionParticle( Particle& particle,
+													  const SensorData& data ) {
+		// NOTE Do nothing!
+	}	
     
 }

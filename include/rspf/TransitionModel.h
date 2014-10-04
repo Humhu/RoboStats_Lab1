@@ -2,6 +2,8 @@
 #define TRANSITION_MODEL_
 
 #include "rspf/Particle.h" //quotes = local folder
+#include "rspf/RobotLogReader.h"
+
 // #include <vector> //carats = system folder
 
 namespace rspf {
@@ -9,7 +11,7 @@ namespace rspf {
     class TransitionModel {
     public:
 		TransitionModel(); 
-		virtual void transitionParticle( Particle x ) = 0;
+		virtual void transitionParticle( Particle& particle, const SensorData& data  ) = 0;
 
 
     private: 

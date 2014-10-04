@@ -72,6 +72,7 @@ namespace rspf {
 		double GetVariance() const;
 
 		double Sample();
+		double GetProb( double meas );		
 
 	protected:
 

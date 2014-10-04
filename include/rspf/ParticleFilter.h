@@ -7,6 +7,8 @@
 #include "rspf/Map.h"
 #include "rspf/Parameterized.h"
 
+#include "rspf/SensorModel.h"
+
 #include <vector> //carats = system folder
 
 
@@ -28,12 +30,16 @@ namespace rspf {
     private: 
 		std::vector<Particle> particleSet;
 		TransitionModel* transitionModel;
+		SensorModel* sensorModel;
 		const Map& map;
 
 		void Initialize( unsigned int numParticles );
 		
     }; // class
-    
+  
+//  		std::vector<double> RayTrace( Particle particle, SensorData data, const Map& _map );
+
+  
 } 
 
 #endif 

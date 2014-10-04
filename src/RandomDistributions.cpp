@@ -76,4 +76,13 @@ namespace rspf {
 		return transformed;
 	}
 	
+	double NormalDistribution::GetProb( double meas ) {
+		double a = 1/(sigma*sqrt(2*M_PI));
+		double b = mean;
+		double c = sigma;
+		double d = 0;
+		double y = a * std::exp(-std::pow((meas-b),2) / (2*std::pow(c,2))) + d;
+		return y;		
+	}
+	
 }

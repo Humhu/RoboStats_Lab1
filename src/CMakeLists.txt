@@ -1,7 +1,9 @@
 #CMake file for src folder
 
 set( RSPF_particlefilter_SOURCES
-     FilterVisualizer.cpp
+	 DefaultTransitionModel.cpp
+	 FilterVisualizer.cpp
+	 LaserSensorModel.cpp
      Map.cpp
      Parameterized.cpp
      Particle.cpp 
@@ -9,6 +11,7 @@ set( RSPF_particlefilter_SOURCES
 	 PoseSE2.cpp
 	 RandomDistributions.cpp
 	 RobotLogReader.cpp 
+	 SensorModel.cpp
 	 StaticTransitionModel.cpp
 	 SynchronizationPrimitives.cpp
 	 Timer.cpp

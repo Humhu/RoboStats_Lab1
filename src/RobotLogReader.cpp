@@ -92,15 +92,15 @@ namespace rspf {
 
             double time = boost::lexical_cast<double>( tokens[187] );
 
-            double lx = boost::lexical_cast<double>( tokens[4] );
-            double ly = boost::lexical_cast<double>( tokens[5] );
+            double lx = scale*boost::lexical_cast<double>( tokens[4] );
+            double ly = scale*boost::lexical_cast<double>( tokens[5] );
             double lth = boost::lexical_cast<double>( tokens[6] );
             PoseSE2 laserPose( lx, ly, lth );
             PoseSE2 laserOffset = pos.Inverse() * laserPose;
             
             SensorData::Scan points;
             for( unsigned int i = 0; i < SensorData::ScanSize; i++ ) {
-                points[i] = boost::lexical_cast<double>( tokens[7 + i] );
+                points[i] = scale*boost::lexical_cast<double>( tokens[7 + i] );
             }
 
             SensorData data( displacement, time, points, laserOffset );

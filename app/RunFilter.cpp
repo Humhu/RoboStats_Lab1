@@ -32,7 +32,7 @@ int main( int argc, char* argv[] ) {
     while( log.HasData() ) {
         SensorData data = log.GetNextData();
 
-		//         std::cout << "Read: " << data << std::endl;
+		std::cout << "Read line." << std::endl;
 		// TODO Run the PF!
 		
 		// apply update from data to particles in the pf
