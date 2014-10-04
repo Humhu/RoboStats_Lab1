@@ -26,6 +26,7 @@ namespace rspf {
         
         double mapScale; // Scale from Map dimensions
         double robotSize; // Size in pixels
+        double particleSubsample;
         
         cv::Mat mapImage;
         

@@ -5,9 +5,17 @@
 
 namespace rspf {
 	
-	ParticleFilter::ParticleFilter( Map _map, unsigned int numParticles ) : map(_map) //default arguments startign from the back. stupid.
+	ParticleFilter::ParticleFilter( const Map& _map, unsigned int numParticles ) : map(_map) //default arguments startign from the back. stupid.
 	{
-		map = _map;
+		Initialize( numParticles );
+	}
+
+	ParticleFilter::ParticleFilter( const Map& _map, const PropertyTree& ptree ) : map( _map )
+	{
+		Initialize( ptree.get<unsigned int>("num_particles") );
+	}
+
+	void ParticleFilter::Initialize( unsigned int numParticles ) {
 		// UniformDistribution( double lower, double upper );
 		UniformDistribution uniformX( 0, map.GetXSize() );
 		UniformDistribution uniformY( 0, map.GetYSize() );
@@ -73,7 +81,6 @@ namespace rspf {
 		for ( int i = 0; i < numParticles; i++ ) {
 			particleSet[i].setPose( particleSet[i].getPose()*myDisplacement );
 		} // end for
-// 		std::cout <<"I displaced every particle."<< std::endl;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 		// "measurement data"
@@ -100,6 +107,7 @@ namespace rspf {
 		// now draw one random # per particle, where the random # is between 0 and max_val of number line, ie, sum of weights
 		UniformDistribution uniformR( 0, weightSum );		
 		uniformR.SetSeed( clock() );
+		
 		std::vector<double> randomNums(numParticles);	
 		
 		for( int i = 0; i < numParticles; i++ ){

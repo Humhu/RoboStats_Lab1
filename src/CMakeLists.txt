@@ -11,6 +11,7 @@ set( RSPF_particlefilter_SOURCES
 	 RobotLogReader.cpp 
 	 StaticTransitionModel.cpp
 	 SynchronizationPrimitives.cpp
+	 Timer.cpp
      TransitionModel.cpp
      WorkerPool.cpp
      )

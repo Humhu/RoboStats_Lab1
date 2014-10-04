@@ -12,7 +12,8 @@ namespace rspf {
         map( _map ),
         windowName( _windowName ),
         mapScale( 1.0 ), // TODO Take as argument
-        robotSize( 10.0 ) {
+        robotSize( 10.0 ),
+        particleSubsample( 1.0 ) {
 
 		Initialize();
     }
@@ -23,7 +24,8 @@ namespace rspf {
 		map( _map ),
 		windowName( ptree.get<std::string>("window_name") ),
 		mapScale( ptree.get<double>("map_scale") ),
-		robotSize( ptree.get<double>("robot_size") ) {
+		robotSize( ptree.get<double>("robot_size") ),
+		particleSubsample( ptree.get<double>("particle_subsample") ) {
 
 		Initialize();
 	}
@@ -82,6 +84,7 @@ namespace rspf {
     void FilterVisualizer::PlotRobotPoses( cv::Mat& img, std::vector<Particle>& particles ) {
 
         unsigned int numPoses = particles.size();
+		unsigned int numToPlot = std::ceil( numPoses/particleSubsample );
 
         // Untransformed triangle points
         Eigen::Vector2d tip;
@@ -92,11 +95,11 @@ namespace rspf {
         right << -robotSize/3.0, -robotSize/4.0;
         
         // Each pose is plotted as a triangle
-        cv::Point points[numPoses][3];
-        const cv::Point* shapes[numPoses];
-        int numPoints[numPoses];
+		cv::Point points[numToPlot][3];
+		const cv::Point* shapes[numToPlot];
+		int numPoints[numToPlot];
         
-        for( unsigned int i = 0; i < numPoses; i++ ) {
+		for( unsigned int i = 0; i < numToPlot; i++ ) {
 
             // Transform the points using the poses
             PoseSE2::Transform trans = particles[i].getPose().GetTransform();
@@ -112,7 +115,7 @@ namespace rspf {
             numPoints[i] = 3;
         }
 
-        cv::fillPoly( img, shapes, numPoints, numPoses, CV_RGB( 255, 0, 0 ), 8 );
+        cv::fillPoly( img, shapes, numPoints, numToPlot, CV_RGB( 255, 0, 0 ), 8 );
     }
 
     

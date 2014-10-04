@@ -1,33 +1,36 @@
 #include "rspf/Map.h"
 #include "rspf/RobotLogReader.h"
 #include "rspf/FilterVisualizer.h"
+#include "rspf/Parameterized.h"
 
 #include <iostream>
 
+using namespace rspf;
+
 int main( int argc, char* argv[] ) {
 
-    if( argc < 3 ) {
-        std::cout << "Please specify map and data filenames." << std::endl;
+    if( argc < 2 ) {
+        std::cout << "Please specify config file." << std::endl;
         return -1;
     }
 
-    std::string mapFilename( argv[1] );
-    std::cout << "Reading map at: " << mapFilename << std::endl;
+    std::string configFilename( argv[1] );
+	PropertyTree ptree = read_property_xml( configFilename );
 
-    rspf::Map map( mapFilename );
+	std::cout << "Initializing map..." << std::endl;
+    Map map( ptree.get_child("map") );
 
-    rspf::ParticleFilter pf( map );
-	std::cout << "made a particle filter. nyah." << std::endl;
+	std::cout << "Initializing particle filter nyah..." << std::endl;
+    ParticleFilter pf( map, ptree.get_child("particle_filter") );
 
-    rspf::FilterVisualizer vis( pf, map, "Filter Visualization" );
-	std::cout << "Made the visualizer." << std::endl;
+	std::cout << "Initializing filter visualizer..." << std::endl;
+    FilterVisualizer vis( pf, map, ptree.get_child("filter_visualizer") );
 	    
-    std::string logFilename( argv[2] );
-    std::cout << "Reading log at: " << logFilename << std::endl;
-
-    rspf::RobotLogReader log( logFilename );
+	std::cout << "Initializing log reader..." << std::endl;
+    RobotLogReader log( ptree.get_child("log_reader") );
+	
     while( log.HasData() ) {
-        rspf::SensorData data = log.GetNextData();
+        SensorData data = log.GetNextData();
 
 		//         std::cout << "Read: " << data << std::endl;
 		// TODO Run the PF!

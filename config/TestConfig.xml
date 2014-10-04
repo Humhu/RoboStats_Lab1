@@ -1,4 +1,11 @@
-<robot_log_path></robot_log_path>
+<log_reader>
+	<log_path>robotdata1.log</robot_log_path>
+	<scale>0.1</scale>
+</log_reader>
+
+<map>
+	<map_path>wean.dat</map_path>
+</map>
 
 <particle_filter>
 	<sensor_model>gaussian</sensor_model>
@@ -12,5 +19,12 @@
 	</transition_model>
 	<resampler>standard</resampler>
 	
-	<num_particles>1000</num_particles>
+	<num_particles>10000</num_particles>
 </particle_filter>
+
+<filter_visualizer>
+	<window_name>Filter Visualizer</window_name>
+	<map_scale>1.0</map_scale>
+	<robot_size>10.0</robot_size>
+	<particle_subsample>100</particle_subsample>
+</filter_visualizer>
