@@ -80,7 +80,7 @@ namespace rspf {
 			double dY = raytraceStepsize * std::sin( scanAngle );
 			double r = 0;
 			
-			if( xL < 0 || xL > map.GetXSize() || yL < 0 || yL > map.GetYSize() ) {
+			if( xL < 0 || xL >= map.GetXSize() - 1 || yL < 0 || yL >= map.GetYSize() - 1 ) {
 				return std::vector<double>() ;
 			}
 			
@@ -93,14 +93,14 @@ namespace rspf {
 				if( xL < 0 ) {
 					xL = 0;
 				}
-				else if( xL >= map.GetXSize() ) {
+				else if( xL >= map.GetXSize() - 1 ) {
 					xL = map.GetXSize() - 1;
 				}
 				
 				if( yL < 0 ) {
 					yL = 0;
 				}
-				else if( yL >= map.GetYSize() ) {
+				else if( yL >= map.GetYSize() - 1 ) {
 					yL = map.GetYSize() - 1;
 				}
 
