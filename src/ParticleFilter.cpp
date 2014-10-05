@@ -66,12 +66,13 @@ namespace rspf {
 	void ParticleFilter::Initialize( unsigned int n )
 	{
 		// UniformDistribution( double lower, double upper );
-		UniformDistribution uniformX( 0, map.GetXSize() - 1 );
-		UniformDistribution uniformY( 0, map.GetYSize() - 1 );
+		UniformDistribution uniformX( 0, map.GetXSize() - 1E-3 );
+		UniformDistribution uniformY( 0, map.GetYSize() - 1E-3 );
 		UniformDistribution uniformTheta( 0, 2*M_PI );
 		
 		clock_t now = clock() >> 8;
 		std::cout << "Seeding with " << now << std::endl;
+		std::cout << "Map size: " << map.GetXSize() << std::endl;
 
 		uniformX.SetSeed( now );
 		uniformY.SetSeed( now+10000 );
@@ -90,9 +91,7 @@ namespace rspf {
 				double mapOccupancy = map.GetValue( myPose.getX(), myPose.getY() );
 
 				// if x,y not object, we're ok, so break out of the while loop
-// 	std::cout<<mapOccupancy<<std::endl;
 				if( mapOccupancy > 0.9 ){
-// 	std::cout<<"yes"<<std::endl;
 
 					// draw a particle
 					// assign pose to Particle
@@ -135,11 +134,17 @@ namespace rspf {
 		particleSet = resampler->resampleParticles( particleSet, numParticles );
 	}
 
+// 	std::vector< std::vector<double> > ParticleFilter::GetLastRaytraces() {
+// 		return sensorModels[0][0]->lastTraces;
+// 	}
+
 	// NOTE Concurrent accesses to particleSet are probably OK
 	void ParticleFilter::handleDataSubset( const SensorData& data, unsigned int startIndex,
 										   unsigned int endIndex, unsigned int instanceNum ) {
 
 		// First transition all the particles and reset their weights, apply sensor models
+// 		sensorModels[0][instanceNum]->lastTraces.clear();
+
 		for(int i = startIndex; i <= endIndex; i++)
 		{
 			transitionModel[instanceNum]->transitionParticle( particleSet[i], data );

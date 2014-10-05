@@ -30,42 +30,30 @@ namespace rspf {
 		// Initialize window
 		cv::namedWindow( windowName, CV_WINDOW_AUTOSIZE );
 		
-// 		double width = map.GetXSize();
-// 		double height = map.GetYSize();
-		double width = map.GetXSize();
-		double height = map.GetYSize();
+		double mapWidth = map.GetXSize();
+		double mapHeight = map.GetYSize();
+		double imageWidth = std::round( mapWidth * mapScale );
+		double imageHeight = std::round( mapHeight * mapScale );
 		
 		// Read map image
-// 		cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
-// 		for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
-// 			for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
-		cv::Mat temp = cv::Mat( width, height, CV_8UC3 );
-		for( unsigned int x = 0; x < width; x++ ) {
-			for( unsigned int y = 0; y < height; y++ ) {	
-				double mapVal = map.GetValue( x, y );
+		mapImage = cv::Mat( imageWidth, imageHeight, CV_8UC3 );
+		for( unsigned int x = 0; x < imageWidth; x++ ) {
+			for( unsigned int y = 0; y < imageHeight; y++ ) {
+				double mapVal = map.GetValue( x/mapScale, y/mapScale );
 				
 				if( mapVal == -1.0 ) {
-					temp.at<cv::Vec3b>(x, y)[0] = 0;
-					temp.at<cv::Vec3b>(x, y)[1] = 0;
-					temp.at<cv::Vec3b>(x, y)[2] = 0;
+					mapImage.at<cv::Vec3b>(x, y)[0] = 0;
+					mapImage.at<cv::Vec3b>(x, y)[1] = 0;
+					mapImage.at<cv::Vec3b>(x, y)[2] = 0;
 				}
 				else {
-					temp.at<cv::Vec3b>(x, y)[0] = 255*mapVal;
-					temp.at<cv::Vec3b>(x, y)[1] = 255*mapVal;
-					temp.at<cv::Vec3b>(x, y)[2] = 255*mapVal;
+					mapImage.at<cv::Vec3b>(x, y)[0] = 255*mapVal;
+					mapImage.at<cv::Vec3b>(x, y)[1] = 255*mapVal;
+					mapImage.at<cv::Vec3b>(x, y)[2] = 255*mapVal;
 				}
 			}
 		}
 		
-// 		cv::Size scaledSize( std::round( width*mapScale ),
-// 							 std::round( height*mapScale ) );
-// 		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
-		cv::Size scaledSize( std::round( height*mapScale ),
-							  std::round( width*mapScale ) );
-		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );		
-		resize( temp, resizeTemp, scaledSize );
-		
-		mapImage = resizeTemp.clone();
 	}
  
     void FilterVisualizer::Update( const SensorData& data ) {
@@ -76,7 +64,13 @@ namespace rspf {
         // TODO!
         std::vector<Particle> particles = filter.GetParticles();
 
+// 		if( !filter.GetLastRaytraces().empty() ) {
+// 			lastTraces = filter.GetLastRaytraces();
+// 		}
+		
 		if( showScans ) {
+
+// 			ShowRaytraces( lastTraces );
 			
 			if( data.hasScan ) {
 				lastData = std::make_shared<SensorData>( data );
@@ -91,6 +85,47 @@ namespace rspf {
         cv::imshow( windowName, currentImage );
     }
 
+// 	void FilterVisualizer::ShowRaytraces( const std::vector< std::vector<double> >& rays ) {
+// 
+// 		std::vector<Particle> particles = filter.GetParticles();
+// 
+// 		if( rays.size() == 0 ) { return; }
+// 		
+// 		unsigned int numPoses = particles.size();
+// 		unsigned int numToPlot = std::ceil( numPoses/particleSubsample );
+// 
+// 		cv::Point points[numToPlot][SensorData::ScanSize + 1];
+// 		const cv::Point* shapes[numToPlot];
+// 		int numPoints[numToPlot];
+// 
+// 		for( unsigned int i = 0; i < numToPlot; i++ ) {
+// 
+// 			PoseSE2 pose = particles[i*particleSubsample].getPose();
+// 			PoseSE2::Transform trans = pose.GetTransform();
+// 			trans.translation() = trans.translation() * mapScale;
+// 
+// 			double theta = SensorData::StartAngle;
+// 			for( unsigned int s = 0; s < SensorData::ScanSize; s++ ) {
+// 
+// 				Eigen::Vector2d scanPoint;
+// 				double r = rays[i][s] * mapScale;
+// 				scanPoint << r * std::cos( theta ),
+// 							 r * std::sin( theta );
+// 				theta += SensorData::ScanResolution;
+// 
+// 				Eigen::Vector2d transformed = trans*scanPoint.colwise().homogeneous();
+// 				points[i][s] = cv::Point( transformed(1), transformed(0) );
+// 			}
+// 
+// 			points[i][SensorData::ScanSize] = cv::Point( trans.translation().y(), trans.translation().x() );
+// 			shapes[i] = points[i];
+// 			numPoints[i] = SensorData::ScanSize + 1;
+// 
+// 		}
+// 		cv::fillPoly( currentImage, shapes, numPoints, numToPlot, CV_RGB( 0, 255, 0 ), 8 );
+// 		
+// 	}
+    
     void FilterVisualizer::PlotScans( cv::Mat& img, const std::vector<Particle>& particles, const SensorData& data ) {
 
 		unsigned int numPoses = particles.size();
@@ -104,7 +139,7 @@ namespace rspf {
 		Eigen::Vector2d scanPoints[SensorData::ScanSize];
 		double theta = SensorData::StartAngle;
 		for( unsigned int s = 0; s < SensorData::ScanSize; s++ ) {
-			double r = data.points[s];
+			double r = data.points[s] * mapScale;
 			scanPoints[s](0) = r*std::cos(theta);
 			scanPoints[s](1) = r*std::sin(theta);
 			theta += SensorData::ScanResolution;
@@ -114,6 +149,7 @@ namespace rspf {
 
 			PoseSE2 pose = particles[i*particleSubsample].getPose() * data.laserOffset;
 			PoseSE2::Transform trans = pose.GetTransform();
+			trans.translation() = trans.translation() * mapScale;
 			
 			for( unsigned int s = 0; s < SensorData::ScanSize; s++ ) {
 				
@@ -121,7 +157,7 @@ namespace rspf {
 				points[i][s] = cv::Point( transformed(1), transformed(0) );
 			}
 			
-			points[i][SensorData::ScanSize] = cv::Point( pose.getY(), pose.getX() );
+			points[i][SensorData::ScanSize] = cv::Point( trans.translation().y(), trans.translation().x() );
 			shapes[i] = points[i];
 			numPoints[i] = SensorData::ScanSize + 1;
 
@@ -152,7 +188,7 @@ namespace rspf {
 
             // Transform the points using the poses
             PoseSE2::Transform trans = particles[i*particleSubsample].getPose().GetTransform();
-            trans.translation() = mapScale*trans.translation();
+            trans.translation() = trans.translation() * mapScale;
             Eigen::Vector2d tipTrans = trans*tip.colwise().homogeneous();
             Eigen::Vector2d leftTrans = trans*left.colwise().homogeneous();
             Eigen::Vector2d rightTrans = trans*right.colwise().homogeneous();

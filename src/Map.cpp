@@ -11,6 +11,7 @@ namespace rspf {
 
 	Map::Map( const PropertyTree& ptree ) :
 		scale( ptree.get<double>("scale") ) {
+		scaleInv = 1.0/scale;
 		Initialize( ptree.get<std::string>( "map_path" ) );
 	}
 
@@ -63,14 +64,17 @@ namespace rspf {
 				map.at<CellType>(xdim-i-1,j) = value; //<---------------------------------------------------
             }
         }
+
+        xLim = (map.rows-1)*scale;
+		yLim = (map.cols-1)*scale;
     }
 
     unsigned int Map::GetXSize() const {
-        return map.rows;
+        return xLim;
     }
 
     unsigned int Map::GetYSize() const {
-        return map.cols;
+        return yLim;
     }
 
     const Map::MapType& Map::GetMap() const {
@@ -82,22 +86,19 @@ namespace rspf {
 	}
 
     Map::CellType Map::GetValue( double x, double y ) const {
-        unsigned int xRounded = std::round( x );
-        unsigned int yRounded = std::round( y );
-		return GetValue( xRounded, yRounded );
-	}
+        x = std::round( x*scaleInv );
+        y = std::round( y*scaleInv );
 
-	Map::CellType Map::GetValue( unsigned int x, unsigned int y ) const {
-		if( x < 0 || x >= GetXSize() || y < 0 || y >= GetYSize() ) {
+		if( x < 0 || x >= map.rows || y < 0 || y >= map.cols ) {
 			std::stringstream ss;
 			ss << "Position (" << x << ", " << y << ") exceeds map size!";
 			throw std::out_of_range( ss.str() );
 		}
-
+		
 		if( map.at<CellType>( x, y ) > 2 ) {
 			std::cout << "Map at (" << x << ", " << y << ") has value " << map.at<CellType>(x,y) << std::endl;
 		}
-        return map.at<CellType>( x, y );
-    }
+		return map.at<CellType>( x, y );
+	}
 
 }

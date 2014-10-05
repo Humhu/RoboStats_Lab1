@@ -15,6 +15,8 @@ namespace rspf {
     public:
 
 		FilterVisualizer( ParticleFilter& filter, const Map& map, const PropertyTree& ptree );
+
+		void ShowRaytraces( const std::vector< std::vector<double> >& rays );
 		
         void Update( const SensorData& data );
         
@@ -29,6 +31,7 @@ namespace rspf {
         double robotSize; // Size in pixels
         double particleSubsample;
 
+		std::vector< std::vector<double> > lastTraces;
 		std::shared_ptr<SensorData> lastData; // Caching for smoothing in between laser scans
         cv::Mat mapImage;
 		cv::Mat currentImage;

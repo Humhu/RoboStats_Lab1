@@ -20,12 +20,16 @@ namespace rspf {
     private:
 		
 		const Map& map;
-
+		
 		unsigned int laserSubsample;
 		double raytraceStepsize;
 		double raytraceThreshold;
+
+		unsigned int numPoints;
+		unsigned int numProbsToSkip;
 		
 		double gaussianWeight;
+		double gaussianVarianceScale;
 		double uniformWeight;
 		double exponentialWeight;
 		double maxRangeWeight;

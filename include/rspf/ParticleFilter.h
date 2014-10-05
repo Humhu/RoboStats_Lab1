@@ -29,6 +29,8 @@ namespace rspf {
 		void make_a_transition(); // all the arguments this "function" would need are already in this workspace. 
 					 			   // this is a function that is updating things that are already in this workspace
 		void handleData( const SensorData& data );
+// 
+// 		std::vector< std::vector<double> > GetLastRaytraces();
 		
     private:
 

@@ -42,7 +42,7 @@ int main( int argc, char* argv[] ) {
 
 		vis.Update(data);
 
-// 		usleep( 1000000 );
+
 
     }
     

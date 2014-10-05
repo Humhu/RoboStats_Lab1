@@ -26,7 +26,6 @@ namespace rspf {
 		double GetScale() const;
         
         /*! \brief Returns the map value at (x,y). Double version rounds the indices. */
-	 	Map::CellType GetValue( unsigned int x, unsigned int y ) const;
         Map::CellType GetValue( double x, double y ) const;
 
         const MapType& GetMap() const;
@@ -35,6 +34,9 @@ namespace rspf {
 
 		/*! \brief Converts grid units to meters. */
 		double scale;
+		double scaleInv;
+		double xLim;
+		double yLim;
 		
         MapType map;
 
