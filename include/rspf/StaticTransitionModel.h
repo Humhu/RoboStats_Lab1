@@ -7,7 +7,9 @@ namespace rspf {
 
     class StaticTransitionModel : public TransitionModel {
     public:
+		
 		StaticTransitionModel(); 
+
 		virtual void transitionParticle( Particle& particle, const SensorData& data );
 
     private: 

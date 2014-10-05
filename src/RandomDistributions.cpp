@@ -23,6 +23,7 @@ namespace rspf {
 
 		lowerBound = lower;
 		scale = upper - lower;
+		density = 1.0/scale;
 	}
 
 	double UniformDistribution::GetLowerBound() const {
@@ -37,6 +38,14 @@ namespace rspf {
 		ScalarType raw = SampleRaw();
 		ScalarType transformed = lowerBound + raw*scale;
 		return transformed;
+	}
+
+	double UniformDistribution::GetProb( double meas ) const {
+		
+		if( meas < lowerBound || meas > (lowerBound + scale) ) {
+			return 0.0;
+		}
+		return density;
 	}
 
 	NormalDistribution::NormalDistribution( double _mean, double variance ) {
@@ -76,7 +85,7 @@ namespace rspf {
 		return transformed;
 	}
 	
-	double NormalDistribution::GetProb( double meas ) {
+	double NormalDistribution::GetProb( double meas ) const {
 		double a = 1/(sigma*sqrt(2*M_PI));
 		double b = mean;
 		double c = sigma;

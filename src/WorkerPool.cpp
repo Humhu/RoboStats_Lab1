@@ -3,12 +3,12 @@
 namespace rspf {
 
 	WorkerPool::WorkerPool( unsigned int numThreads ) :
-		jobCounter( 0 ) {
+		hasJobs( jobQueueMutex ) {
 		Initialize( numThreads );
 	}
 
 	WorkerPool::WorkerPool( const PropertyTree& ptree ) :
-		jobCounter( 0 ) {
+		hasJobs( jobQueueMutex ) {
 		Initialize( ptree.get<unsigned int>("num_threads") );
 	}
 		
@@ -17,7 +17,7 @@ namespace rspf {
 		Lock lock( jobQueueMutex );
 
 		jobQueue.push_back( job );
-		jobCounter.Increment();
+		hasJobs.NotifyAll();
 	}
 
 	void WorkerPool::Initialize( unsigned int numThreads ) {
@@ -27,15 +27,27 @@ namespace rspf {
 			workerThreads.create_thread( std::bind( &WorkerPool::WorkerLoop, this ) );
 		}
 	}
+
+	unsigned int WorkerPool::size() const {
+		return workerThreads.size();
+	}
 	
 	void WorkerPool::WorkerLoop() {
 
 		while( true ) {
-			jobCounter.Decrement();
-			Job job = jobQueue.front();
-			jobQueue.pop_front();
+			Job job = WaitOnJob();
 			job();
 		}
+	}
+
+	WorkerPool::Job WorkerPool::WaitOnJob() {
+		Lock lock( jobQueueMutex );
+		while( jobQueue.empty() ) {
+			hasJobs.Wait( lock );
+		}
+		Job job = jobQueue.front();
+		jobQueue.pop_front();
+		return job;
 	}
 	
 }

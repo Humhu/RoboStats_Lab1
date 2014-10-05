@@ -1,4 +1,4 @@
-	#ifndef _ROBOT_LOG_READER_H_
+#ifndef _ROBOT_LOG_READER_H_
 #define _ROBOT_LOG_READER_H_
 
 #include "rspf/PoseSE2.h"
@@ -17,6 +17,7 @@ namespace rspf {
         static constexpr double StartAngle = -M_PI/2.0;
         static constexpr double EndAngle = M_PI/2.0;
         static constexpr double ScanResolution = M_PI/ScanSize;
+		static constexpr double MaxRange = 818.3;
         
         typedef std::array<double, ScanSize> Scan;
 

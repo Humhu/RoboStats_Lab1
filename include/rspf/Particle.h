@@ -8,11 +8,11 @@ namespace rspf {
     class Particle {
     public:
 		Particle(); //state x,y,theta
-		PoseSE2 getPose();
+		PoseSE2 getPose() const;
 // 		double getX();
 // 		double getY();
 // 		double getTheta();
-		double getW();
+		double getW() const;
 //     
  		void setPose( PoseSE2 x );
 // 		void setX( double x );

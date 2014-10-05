@@ -8,16 +8,70 @@
 </map>
 
 <particle_filter>
-	<sensor_model>gaussian</sensor_model>
+	<workers>
+		<num_threads>4</num_threads>
+	</workers>
+	
+	<sensor_model>
+		<type>laser</type>
+		<laser_subsample>5</laser_subsample>
+		
+		<gaussian_weight>1</gaussian_weight>
+		<gaussian_component>
+			<mean>0</mean>
+			<variance>10</variance>
+		</gaussian_component>
+		
+		<uniform_weight>100</uniform_weight>
+		<uniform_component>
+			<lower_bound>0</lower_bound>
+			<upper_bound>820</upper_bound>
+		</uniform_component>
+		
+		<exponential_weight>0</exponential_weight>
+		<exponential_coeff>-0.5</exponential_coeff>
+			
+		<max_range_weight>0</max_range_weight>
+	</sensor_model>
+
+	<!--sensor_model>
+		<type>wall</type>
+	</sensor_model-->
+	
 	<transition_model>
 		<type>default</type>
-		<var_x>1.0</var_x>
-		<var_y>1.0</var_y>
-		<var_t>1.0</var_t>
+		<x_noise>
+			<mean>0</mean>
+			<variance>0.01</variance>
+		</x_noise>
+		<y_noise>
+			<mean>0</mean>
+			<variance>0.01</variance>
+		</y_noise>
+		<th_noise>
+			<mean>0</mean>
+			<variance>0.01</variance>
+		</th_noise>
 	</transition_model>
-	<resampler>standard</resampler>
 	
-	<num_particles>1000</num_particles>
+	<resampler>
+		<type>low_variance</type>
+		<x_noise>
+			<mean>0</mean>
+			<variance>0</variance>
+		</x_noise>
+		<y_noise>
+			<mean>0</mean>
+			<variance>0</variance>
+		</y_noise>
+		<th_noise>
+			<mean>0</mean>
+			<variance>0</variance>
+		</th_noise>
+	</resampler>
+
+   <init_particles>20000</init_particles>
+	<num_particles>2000</num_particles>
 </particle_filter>
 
 <filter_visualizer>
@@ -25,4 +79,5 @@
 	<map_scale>1.0</map_scale>
 	<robot_size>10.0</robot_size>
 	<particle_subsample>1</particle_subsample>
+	<show_scans>true</show_scans>
 </filter_visualizer>

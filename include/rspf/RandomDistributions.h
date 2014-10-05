@@ -48,11 +48,13 @@ namespace rspf {
 		double GetUpperBound() const;
 
 		double Sample();
+		double GetProb( double meas ) const;
 
 	protected:
 
 		boost::uniform_01<double> generator;
-		
+
+		double density;
 		double lowerBound;
 		double scale; // Difference of upper and lower
 
@@ -72,7 +74,7 @@ namespace rspf {
 		double GetVariance() const;
 
 		double Sample();
-		double GetProb( double meas );		
+		double GetProb( double meas ) const;
 
 	protected:
 

@@ -2,11 +2,18 @@
 #include "rspf/RandomDistributions.h"
 // #include <time.h>  
 
-
 namespace rspf {
 
-    LaserSensorModel::LaserSensorModel( const Map& _map) :
-		map( _map ) {}
+    LaserSensorModel::LaserSensorModel( const Map& _map, const PropertyTree& ptree ) :
+		map( _map ),
+		laserSubsample( ptree.get<unsigned int>("laser_subsample") ),
+		gaussianWeight( ptree.get<double>("gaussian_weight") ),
+		uniformWeight( ptree.get<double>("uniform_weight") ),
+		exponentialWeight( ptree.get<double>("exponential_weight") ),
+		maxRangeWeight( ptree.get<double>("max_range_weight") ),
+		gaussianComponent( ptree.get_child("gaussian_component") ),
+		uniformComponent( ptree.get_child("uniform_component") ),
+		exponentialCoefficient( ptree.get<double>("exponential_coeff") ) {}
 		
 	void LaserSensorModel::weightParticle( Particle& particle, 
 											const SensorData& data )
@@ -15,8 +22,6 @@ namespace rspf {
 			return;
 		}
 		
-//		double weightSum = 0; // reset weightSum, because we're about to re-weight things
-			
 		// get the laser ranges we expect to see for this particle
 		std::vector<double> zhat = RayTrace( particle, data );
 		
@@ -25,15 +30,27 @@ namespace rspf {
 			particle.setW( 0 );
 			return;
 		}
-		
+
+// 		double cumProb = 0;
 		double cumProb = 1; // initialize the cumulative probability of all the laser probabilities for this particle
 					
 		// find out what the probability of seeing the laser from this position is
 		for( unsigned int s = 0; s < data.ScanSize; s++ ) {
-			NormalDistribution laserPDF( zhat[s], 10 ); // make a laser pdf centered at zhat
+
+			double rTrue = data.points[s];
+			double rEst = zhat[s];
+			
+			double indivProb = CalculateGaussian( rEst, rTrue )
+							+ CalculateUniform( rTrue )
+							+ CalculateExponential( rTrue )
+							+ CalculateMaxRange( rTrue );
+			
 			// find the probability of the real laser measurement under this distribution, and mulitply it into the cumulative
-			double indivProb = laserPDF.GetProb( data.points[s] ) + 1;
 			cumProb = cumProb * indivProb;
+// 			cumProb += indivProb;
+
+// 			std::cout << "rEst: " << rEst << ", rTrue: " << rTrue << std::endl;
+// 			std::cout << "indivProb: " << indivProb << ", cumProb: " << cumProb << std::endl;
 			
 		} // end find-cumlative-probability-of-every-laser-beam-for-this-particle
 	
@@ -50,16 +67,17 @@ namespace rspf {
 		double laserAngle = laserH.getTheta(); // get the angle of the laser in the world
 		double scanAngle = data.StartAngle + laserAngle;  // get the starting scan angle (relative to the laser angle)
 							
-		for( unsigned int s = 0; s < data.ScanSize; s++ ) { //data.ScanSize
+		for( unsigned int s = 0; s < data.ScanSize; s += laserSubsample ) { //data.ScanSize
 			
 			double prob = 1; // this is the starting probability that the laser beam passes through a cell
-			double step = 1; // this is the step distance at which we will re-check the laser probability
-			double threshold = 0; // this is the threshold for when we decide the laser has hit something
+			double step = 0.5; // this is the step distance at which we will re-check the laser probability
+			double threshold = 0.2; // this is the threshold for when we decide the laser has hit something
 			
 			double xL = laserH.getX(); // this is the x-starting position of the laser beam
 			double yL = laserH.getY(); // this is the y-starting position of the laser beam
 			double cosS = std::cos( scanAngle );
-			double sinS = std::cos( scanAngle );
+			double sinS = std::sin( scanAngle );
+			double r = 0;
 			
 			if( xL < 0 || xL > map.GetXSize() || yL < 0 || yL > map.GetYSize() ) {
 				return std::vector<double>() ;
@@ -69,6 +87,7 @@ namespace rspf {
 				
 				xL = xL + step * cosS; // step along the laser ray
 				yL = yL + step * sinS;
+				r += step;
 				
 				if( xL < 0 ) {
 					xL = 0;
@@ -92,14 +111,35 @@ namespace rspf {
 			
 			xL = xL-laserH.getX();
 			yL = yL-laserH.getY();
-			zhat[s] = std::sqrt( xL*xL + yL*yL ); // store the distance that the laser went on this scan before it hit something
-			scanAngle = scanAngle + data.ScanResolution; // update the scan angle
+// 			zhat[s] = std::sqrt( xL*xL + yL*yL ); // store the distance that the laser went on this scan before it hit something
+			zhat[s] = r;
+			scanAngle += data.ScanResolution; // update the scan angle
 			
 		} // end for-every-scan
 		
 		return zhat;
 		
 	} // end RayTrace method	
+
+	double LaserSensorModel::CalculateGaussian( double rEst, double rTrue ) {
+		return gaussianWeight * gaussianComponent.GetProb( rEst - rTrue );
+	}
+
+	double LaserSensorModel::CalculateUniform( double rTrue ) {
+		return uniformWeight * uniformComponent.GetProb( rTrue );
+	}
+
+	double LaserSensorModel::CalculateExponential( double rTrue ) {
+		return exponentialWeight * std::exp( exponentialCoefficient * rTrue );
+	}
+
+	double LaserSensorModel::CalculateMaxRange( double rTrue ) {
+		// There is some roundoff error
+		if( std::abs( rTrue - SensorData::MaxRange ) < 10E-6 ) {
+			return maxRangeWeight;
+		}
+		return 0.0;
+	}
 	
 }	
 	

@@ -28,19 +28,20 @@ int main( int argc, char* argv[] ) {
 	    
 	std::cout << "Initializing log reader..." << std::endl;
     RobotLogReader log( ptree.get_child("log_reader") );
-	
-    while( log.HasData() ) {
-        SensorData data = log.GetNextData();
 
-		std::cout << "Read line." << std::endl;
-		// TODO Run the PF!
-		
+	unsigned int lineNumber = 0;
+    while( log.HasData() ) {
+
+		SensorData data = log.GetNextData();
+
+		std::cout << "Read line " << lineNumber << std::endl;
+		lineNumber++;
+				
 		// apply update from data to particles in the pf
 		pf.handleData(data);
-		
 
-		vis.Update();
-		
+		vis.Update(data);
+
     }
     
     return 0;

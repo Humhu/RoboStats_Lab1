@@ -7,25 +7,14 @@ namespace rspf {
     bool FilterVisualizer::windowThreadInitialized = false;
 
     FilterVisualizer::FilterVisualizer( ParticleFilter& _filter, const Map& _map,
-                                        const std::string& _windowName ) :
-        filter( _filter ),
-        map( _map ),
-        windowName( _windowName ),
-        mapScale( 1.0 ), // TODO Take as argument
-        robotSize( 10.0 ),
-        particleSubsample( 1.0 ) {
-
-		Initialize();
-    }
-
-    FilterVisualizer::FilterVisualizer( ParticleFilter& _filter, const Map& _map,
 										const PropertyTree& ptree ) :
 		filter( _filter ),
 		map( _map ),
 		windowName( ptree.get<std::string>("window_name") ),
 		mapScale( ptree.get<double>("map_scale") ),
 		robotSize( ptree.get<double>("robot_size") ),
-		particleSubsample( ptree.get<double>("particle_subsample") ) {
+		particleSubsample( ptree.get<double>("particle_subsample") ),
+		showScans( ptree.get<bool>("show_scans") ) {
 
 		Initialize();
 	}
@@ -68,20 +57,69 @@ namespace rspf {
 		mapImage = resizeTemp.clone();
 	}
  
-    void FilterVisualizer::Update() {
+    void FilterVisualizer::Update( const SensorData& data ) {
 
-        cv::Mat image = mapImage.clone();
+        currentImage = mapImage.clone();
 
         // Add things to the image here
         // TODO!
         std::vector<Particle> particles = filter.GetParticles();
-		
-        PlotRobotPoses( image, particles );
-        
-        cv::imshow( windowName, image );
+
+		if( showScans ) {
+			
+			if( data.hasScan ) {
+				lastData = std::make_shared<SensorData>( data );
+			}
+			if( lastData ) {
+				PlotScans( currentImage, particles, *lastData );
+			}
+			
+		}
+        PlotRobotPoses( currentImage, particles );
+
+        cv::imshow( windowName, currentImage );
     }
 
-    void FilterVisualizer::PlotRobotPoses( cv::Mat& img, std::vector<Particle>& particles ) {
+    void FilterVisualizer::PlotScans( cv::Mat& img, const std::vector<Particle>& particles, const SensorData& data ) {
+
+		unsigned int numPoses = particles.size();
+		unsigned int numToPlot = std::ceil( numPoses/particleSubsample );
+		
+		cv::Point points[numToPlot][SensorData::ScanSize + 1];
+		const cv::Point* shapes[numToPlot];
+		int numPoints[numToPlot];
+
+		// First get scan points
+		Eigen::Vector2d scanPoints[SensorData::ScanSize];
+		double theta = SensorData::StartAngle;
+		for( unsigned int s = 0; s < SensorData::ScanSize; s++ ) {
+			double r = data.points[s];
+			scanPoints[s](0) = r*std::cos(theta);
+			scanPoints[s](1) = r*std::sin(theta);
+			theta += SensorData::ScanResolution;
+		}
+
+		for( unsigned int i = 0; i < numToPlot; i++ ) {
+
+			PoseSE2 pose = particles[i*particleSubsample].getPose() * data.laserOffset;
+			PoseSE2::Transform trans = pose.GetTransform();
+			
+			for( unsigned int s = 0; s < SensorData::ScanSize; s++ ) {
+				
+				Eigen::Vector2d transformed = trans*scanPoints[s].colwise().homogeneous();
+				points[i][s] = cv::Point( transformed(1), transformed(0) );
+			}
+			
+			points[i][SensorData::ScanSize] = cv::Point( pose.getY(), pose.getX() );
+			shapes[i] = points[i];
+			numPoints[i] = SensorData::ScanSize + 1;
+
+		}
+			cv::fillPoly( img, shapes, numPoints, numToPlot, CV_RGB( 255, 255, 0 ), 8 );
+			
+	}
+
+    void FilterVisualizer::PlotRobotPoses( cv::Mat& img, const std::vector<Particle>& particles ) {
 
         unsigned int numPoses = particles.size();
 		unsigned int numToPlot = std::ceil( numPoses/particleSubsample );
@@ -102,7 +140,7 @@ namespace rspf {
 		for( unsigned int i = 0; i < numToPlot; i++ ) {
 
             // Transform the points using the poses
-            PoseSE2::Transform trans = particles[i].getPose().GetTransform();
+            PoseSE2::Transform trans = particles[i*particleSubsample].getPose().GetTransform();
             trans.translation() = mapScale*trans.translation();
             Eigen::Vector2d tipTrans = trans*tip.colwise().homogeneous();
             Eigen::Vector2d leftTrans = trans*left.colwise().homogeneous();

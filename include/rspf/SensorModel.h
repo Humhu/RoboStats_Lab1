@@ -5,10 +5,14 @@
 #include "rspf/RobotLogReader.h"
 #include "rspf/Map.h"
 
+#include <memory>
+
 namespace rspf {
 
 	class SensorModel {
 	public:
+
+		typedef std::shared_ptr<SensorModel> Ptr;
 		
 		SensorModel();
 		

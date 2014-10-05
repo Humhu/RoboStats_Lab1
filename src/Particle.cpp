@@ -13,8 +13,8 @@ namespace rspf {
 // 	double Particle::getX() { return x; }
 // 	double Particle::getY() { return y; }
 // 	double Particle::getTheta() { return theta; }
-	double Particle::getW() { return w; }
-	PoseSE2 Particle::getPose() {return pose; }
+	double Particle::getW() const { return w; }
+	PoseSE2 Particle::getPose() const { return pose; }
     
 // 	void Particle::setX( double _xin ) { x = _xin; }
 // 	void Particle::setY( double _xin ) { y = _xin; }

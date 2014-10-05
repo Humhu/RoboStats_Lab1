@@ -17,17 +17,20 @@ namespace rspf {
 		WorkerPool( const PropertyTree& ptree );
 
 		void EnqueueJob( const Job& job );
+		unsigned int size() const;
 		
 	protected:
 
 		Mutex jobQueueMutex;
-		Semaphore jobCounter;
+		ConditionVariable hasJobs;
+		
 		std::deque<Job> jobQueue;
 		
 		boost::thread_group workerThreads;
 
 		void WorkerLoop();
 		void Initialize( unsigned int numThreads );
+		WorkerPool::Job WaitOnJob();
 		
 	};
 	
