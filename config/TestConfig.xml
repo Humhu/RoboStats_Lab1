@@ -26,7 +26,7 @@
 			<variance>5</variance>
 		</gaussian_component>
 		
-		<uniform_weight>820</uniform_weight>
+		<uniform_weight>20</uniform_weight>
 		<uniform_component>
 			<lower_bound>0</lower_bound>
 			<upper_bound>820</upper_bound>
@@ -75,7 +75,7 @@
 		</th_noise>
 	</resampler>
 
-   <init_particles>100000</init_particles>
+	<init_particles>100000</init_particles>
 	<num_particles>100</num_particles>
 </particle_filter>
 

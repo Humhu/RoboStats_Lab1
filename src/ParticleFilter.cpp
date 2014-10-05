@@ -90,7 +90,10 @@ namespace rspf {
 				double mapOccupancy = map.GetValue( myPose.getX(), myPose.getY() );
 
 				// if x,y not object, we're ok, so break out of the while loop
+// 	std::cout<<mapOccupancy<<std::endl;
 				if( mapOccupancy > 0.9 ){
+// 	std::cout<<"yes"<<std::endl;
+
 					// draw a particle
 					// assign pose to Particle
 						particleSet[i].setPose( myPose );
