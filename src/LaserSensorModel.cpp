@@ -93,15 +93,15 @@ namespace rspf {
 				if( xL < 0 ) {
 					xL = 0;
 				}
-				else if( xL > map.GetXSize() ) {
-					xL = map.GetXSize();
+				else if( xL >= map.GetXSize() ) {
+					xL = map.GetXSize() - 1;
 				}
 				
 				if( yL < 0 ) {
 					yL = 0;
 				}
-				else if( yL > map.GetYSize() ) {
-					yL = map.GetYSize();
+				else if( yL >= map.GetYSize() ) {
+					yL = map.GetYSize() - 1;
 				}
 
 				double mapVal = map.GetValue( xL, yL );

@@ -13,7 +13,7 @@
 		<num_threads>4</num_threads>
 	</workers>
 	
-	<!--sensor_model>
+	<sensor_model>
 		<type>laser</type>
 		<laser_subsample>5</laser_subsample>
 
@@ -36,7 +36,7 @@
 		<exponential_coeff>-0.5</exponential_coeff>
 			
 		<max_range_weight>0</max_range_weight>
-	</sensor_model-->
+	</sensor_model>
 
 	<sensor_model>
 		<type>wall</type>
@@ -76,7 +76,7 @@
 	</resampler>
 
 	<init_particles>100000</init_particles>
-	<num_particles>100</num_particles>
+	<num_particles>2000</num_particles>
 </particle_filter>
 
 <filter_visualizer>
