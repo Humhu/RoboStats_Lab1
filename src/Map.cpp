@@ -57,6 +57,9 @@ namespace rspf {
 
             for( unsigned int i = 0; i < xdim; i++ ) {
 				CellType value = boost::lexical_cast<CellType>( tokens[i] );
+				if( value > 2.0 ) {
+					std::cout << "Element " << tokens[i] << " converted to " << value << std::endl;
+				}
 				map.at<CellType>(i,j) = value;
             }
         }
@@ -85,10 +88,14 @@ namespace rspf {
 	}
 
 	Map::CellType Map::GetValue( unsigned int x, unsigned int y ) const {
-		if( x < 0 || x > GetXSize() || y < 0 || y > GetYSize() ) {
+		if( x < 0 || x >= GetXSize() || y < 0 || y >= GetYSize() ) {
 			std::stringstream ss;
 			ss << "Position (" << x << ", " << y << ") exceeds map size!";
 			throw std::out_of_range( ss.str() );
+		}
+
+		if( map.at<CellType>( x, y ) > 2 ) {
+			std::cout << "Map at (" << x << ", " << y << ") has value " << map.at<CellType>(x,y) << std::endl;
 		}
         return map.at<CellType>( x, y );
     }

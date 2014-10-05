@@ -25,7 +25,14 @@ namespace rspf {
 		double weightSum = 0;
 		for( unsigned int i = 0; i < numParticles; i++ ) {
 			weightSum += particles[i].getW();
+			if( particles[i].getW() > 2 ) {
+				std::cout << "Added weight: " << particles[i].getW() << " for particle at "
+					<< particles[i].getPose() << std::endl;
+			}
+				
 		}
+
+		std::cout << "Weight sum: " << weightSum << std::endl;
 		
 		double combtooth = weightSum / ( numSamples );
 		uniformDist.SetBounds( 0, combtooth );

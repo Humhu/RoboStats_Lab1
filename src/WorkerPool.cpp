@@ -13,6 +13,10 @@ namespace rspf {
 	}
 		
 
+	WorkerPool::~WorkerPool() {
+		workerThreads.interrupt_all();
+	}
+		
 	void WorkerPool::EnqueueJob( const Job& job ) {
 		Lock lock( jobQueueMutex );
 

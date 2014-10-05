@@ -15,6 +15,7 @@ namespace rspf {
 		
 		WorkerPool( unsigned int numThreads );
 		WorkerPool( const PropertyTree& ptree );
+		~WorkerPool();
 
 		void EnqueueJob( const Job& job );
 		unsigned int size() const;

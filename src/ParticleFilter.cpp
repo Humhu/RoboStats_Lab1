@@ -66,11 +66,12 @@ namespace rspf {
 	void ParticleFilter::Initialize( unsigned int n )
 	{
 		// UniformDistribution( double lower, double upper );
-		UniformDistribution uniformX( 0, map.GetXSize() );
-		UniformDistribution uniformY( 0, map.GetYSize() );
+		UniformDistribution uniformX( 0, map.GetXSize() - 1 );
+		UniformDistribution uniformY( 0, map.GetYSize() - 1 );
 		UniformDistribution uniformTheta( 0, 2*M_PI );
 		
-		clock_t now = clock();
+		clock_t now = clock() >> 8;
+		std::cout << "Seeding with " << now << std::endl;
 
 		uniformX.SetSeed( now );
 		uniformY.SetSeed( now+10000 );
@@ -91,10 +92,9 @@ namespace rspf {
 				// if x,y not object, we're ok, so break out of the while loop
 				if( mapOccupancy > 0.9 ){
 					// draw a particle
-						particleSet[i] = Particle();
-						
 					// assign pose to Particle
-						particleSet[i].setPose( myPose );  
+						particleSet[i].setPose( myPose );
+						particleSet[i].setW( 1.0 );
 						
 					break;
 					
@@ -125,7 +125,10 @@ namespace rspf {
 		for( unsigned int i = 0; i < numWorkers; i++ ) {
 			jobsPending.Decrement();
 		}
-		
+
+		for( unsigned int i = 0; i < particleSet.size(); i++ ) {
+			double w = particleSet[i].getW();
+		}
 		particleSet = resampler->resampleParticles( particleSet, numParticles );
 	}
 

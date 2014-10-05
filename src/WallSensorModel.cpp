@@ -27,6 +27,9 @@ namespace rspf {
 		if( mapValue == -1.0 ) {
 			particle.setW( 0 );
 		}
+		else {
+			particle.setW( mapValue * particle.getW() );
+		}
 		
 	}
 	
