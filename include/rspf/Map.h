@@ -23,6 +23,7 @@ namespace rspf {
 
         unsigned int GetXSize() const;
         unsigned int GetYSize() const;
+		double GetScale() const;
         
         /*! \brief Returns the map value at (x,y). Double version rounds the indices. */
 	 	Map::CellType GetValue( unsigned int x, unsigned int y ) const;
@@ -32,6 +33,9 @@ namespace rspf {
         
     protected:
 
+		/*! \brief Converts grid units to meters. */
+		double scale;
+		
         MapType map;
 
 		void Initialize( const std::string& filename );

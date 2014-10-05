@@ -22,6 +22,8 @@ namespace rspf {
 		const Map& map;
 
 		unsigned int laserSubsample;
+		double raytraceStepsize;
+		double raytraceThreshold;
 		
 		double gaussianWeight;
 		double uniformWeight;

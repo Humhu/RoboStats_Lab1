@@ -5,6 +5,7 @@
 
 <map>
 	<map_path>wean.dat</map_path>
+	<scale>0.1</scale>
 </map>
 
 <particle_filter>
@@ -15,14 +16,17 @@
 	<sensor_model>
 		<type>laser</type>
 		<laser_subsample>5</laser_subsample>
+
+		<raytrace_stepsize>1.0</raytrace_stepsize>
+		<raytrace_threshold>0.2</raytrace_threshold>
 		
 		<gaussian_weight>1</gaussian_weight>
 		<gaussian_component>
 			<mean>0</mean>
-			<variance>10</variance>
+			<variance>2</variance>
 		</gaussian_component>
 		
-		<uniform_weight>100</uniform_weight>
+		<uniform_weight>0</uniform_weight>
 		<uniform_component>
 			<lower_bound>0</lower_bound>
 			<upper_bound>820</upper_bound>
@@ -42,15 +46,15 @@
 		<type>default</type>
 		<x_noise>
 			<mean>0</mean>
-			<variance>0.01</variance>
+			<variance>0.1</variance>
 		</x_noise>
 		<y_noise>
 			<mean>0</mean>
-			<variance>0.01</variance>
+			<variance>0.1</variance>
 		</y_noise>
 		<th_noise>
 			<mean>0</mean>
-			<variance>0.01</variance>
+			<variance>0.005</variance>
 		</th_noise>
 	</transition_model>
 	
@@ -71,13 +75,13 @@
 	</resampler>
 
    <init_particles>20000</init_particles>
-	<num_particles>2000</num_particles>
+	<num_particles>5000</num_particles>
 </particle_filter>
 
 <filter_visualizer>
 	<window_name>Filter Visualizer</window_name>
 	<map_scale>1.0</map_scale>
 	<robot_size>10.0</robot_size>
-	<particle_subsample>1</particle_subsample>
+	<particle_subsample>10</particle_subsample>
 	<show_scans>true</show_scans>
 </filter_visualizer>

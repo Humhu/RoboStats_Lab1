@@ -9,11 +9,8 @@
 
 namespace rspf {
 
-    Map::Map( const std::string& filename ) {
-		Initialize( filename );
-	}
-
-	Map::Map( const PropertyTree& ptree ) {
+	Map::Map( const PropertyTree& ptree ) :
+		scale( ptree.get<double>("scale") ) {
 		Initialize( ptree.get<std::string>( "map_path" ) );
 	}
 
@@ -76,7 +73,11 @@ namespace rspf {
     const Map::MapType& Map::GetMap() const {
         return map;
     }
-    
+
+    double Map::GetScale() const {
+		return scale;
+	}
+
     Map::CellType Map::GetValue( double x, double y ) const {
         unsigned int xRounded = std::round( x );
         unsigned int yRounded = std::round( y );

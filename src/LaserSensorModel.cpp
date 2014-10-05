@@ -13,7 +13,9 @@ namespace rspf {
 		maxRangeWeight( ptree.get<double>("max_range_weight") ),
 		gaussianComponent( ptree.get_child("gaussian_component") ),
 		uniformComponent( ptree.get_child("uniform_component") ),
-		exponentialCoefficient( ptree.get<double>("exponential_coeff") ) {}
+		exponentialCoefficient( ptree.get<double>("exponential_coeff") ),
+		raytraceStepsize( ptree.get<double>("raytrace_stepsize") ),
+		raytraceThreshold( ptree.get<double>("raytrace_threshold") ) {}
 		
 	void LaserSensorModel::weightParticle( Particle& particle, 
 											const SensorData& data )
@@ -35,7 +37,7 @@ namespace rspf {
 		double cumProb = 1; // initialize the cumulative probability of all the laser probabilities for this particle
 					
 		// find out what the probability of seeing the laser from this position is
-		for( unsigned int s = 0; s < data.ScanSize; s++ ) {
+		for( unsigned int s = 0; s < data.ScanSize; s+= laserSubsample ) {
 
 			double rTrue = data.points[s];
 			double rEst = zhat[s];
@@ -70,24 +72,23 @@ namespace rspf {
 		for( unsigned int s = 0; s < data.ScanSize; s += laserSubsample ) { //data.ScanSize
 			
 			double prob = 1; // this is the starting probability that the laser beam passes through a cell
-			double step = 0.5; // this is the step distance at which we will re-check the laser probability
-			double threshold = 0.2; // this is the threshold for when we decide the laser has hit something
 			
 			double xL = laserH.getX(); // this is the x-starting position of the laser beam
 			double yL = laserH.getY(); // this is the y-starting position of the laser beam
-			double cosS = std::cos( scanAngle );
-			double sinS = std::sin( scanAngle );
+
+			double dX = raytraceStepsize * std::cos( scanAngle );
+			double dY = raytraceStepsize * std::sin( scanAngle );
 			double r = 0;
 			
 			if( xL < 0 || xL > map.GetXSize() || yL < 0 || yL > map.GetYSize() ) {
 				return std::vector<double>() ;
 			}
 			
-			while( prob > threshold ){
+			while( prob > raytraceThreshold ){
 				
-				xL = xL + step * cosS; // step along the laser ray
-				yL = yL + step * sinS;
-				r += step;
+				xL += dX; // step along the laser ray
+				yL += dY;
+				r += raytraceStepsize;
 				
 				if( xL < 0 ) {
 					xL = 0;
@@ -112,7 +113,7 @@ namespace rspf {
 			xL = xL-laserH.getX();
 			yL = yL-laserH.getY();
 // 			zhat[s] = std::sqrt( xL*xL + yL*yL ); // store the distance that the laser went on this scan before it hit something
-			zhat[s] = r;
+			zhat[s] = 0.1*r;
 			scanAngle += data.ScanResolution; // update the scan angle
 			
 		} // end for-every-scan
