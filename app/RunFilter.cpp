@@ -34,7 +34,7 @@ int main( int argc, char* argv[] ) {
 
 		SensorData data = log.GetNextData();
 
-		std::cout << "Read line " << lineNumber << std::endl;
+// 		std::cout << "Read line " << lineNumber << std::endl;
 		lineNumber++;
 				
 		// apply update from data to particles in the pf

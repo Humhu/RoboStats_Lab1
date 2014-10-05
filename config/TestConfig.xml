@@ -4,7 +4,7 @@
 </log_reader>
 
 <map>
-	<map_path>wean.dat</map_path>
+	<map_path>wean3.dat</map_path>
 	<scale>0.1</scale>
 </map>
 
@@ -13,20 +13,20 @@
 		<num_threads>4</num_threads>
 	</workers>
 	
-	<!--sensor_model>
+	<sensor_model>
 		<type>laser</type>
-		<laser_subsample>5</laser_subsample>
+		<laser_subsample>1</laser_subsample>
 
 		<raytrace_stepsize>1.0</raytrace_stepsize>
 		<raytrace_threshold>0.1</raytrace_threshold>
 		
-		<gaussian_weight>0.001</gaussian_weight>
+		<gaussian_weight>0.01</gaussian_weight>
 		<gaussian_component>
 			<mean>0</mean>
 			<variance>5</variance>
 		</gaussian_component>
 		
-		<uniform_weight>20</uniform_weight>
+		<uniform_weight>50</uniform_weight> <!--20-->
 		<uniform_component>
 			<lower_bound>0</lower_bound>
 			<upper_bound>820</upper_bound>
@@ -36,7 +36,7 @@
 		<exponential_coeff>-0.5</exponential_coeff>
 			
 		<max_range_weight>0</max_range_weight>
-	</sensor_model-->
+	</sensor_model>
 
 	<sensor_model>
 		<type>wall</type>
@@ -71,12 +71,12 @@
 		</y_noise>
 		<th_noise>
 			<mean>0</mean>
-			<variance>0.1</variance>
+			<variance>0.005</variance>
 		</th_noise>
 	</resampler>
 
-	<init_particles>100000</init_particles>
-	<num_particles>20000</num_particles>
+	<init_particles>50000</init_particles>
+	<num_particles>2000</num_particles>
 </particle_filter>
 
 <filter_visualizer>

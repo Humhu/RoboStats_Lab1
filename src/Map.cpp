@@ -60,7 +60,7 @@ namespace rspf {
 				if( value > 2.0 ) {
 					std::cout << "Element " << tokens[i] << " converted to " << value << std::endl;
 				}
-				map.at<CellType>(i,j) = value;
+				map.at<CellType>(xdim-i-1,j) = value; //<---------------------------------------------------
             }
         }
     }
