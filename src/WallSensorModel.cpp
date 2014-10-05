@@ -7,8 +7,8 @@ namespace rspf {
 
 		xMin = 0;
 		yMin = 0;
-		xMax = map.GetXSize();
-		yMax = map.GetYSize();
+		xMax = map.GetXSize() - 1;
+		yMax = map.GetYSize() - 1;
 	}
 
 	void WallSensorModel::weightParticle( Particle& particle, const SensorData& data ) {

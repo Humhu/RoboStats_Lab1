@@ -13,12 +13,12 @@
 		<num_threads>4</num_threads>
 	</workers>
 	
-	<sensor_model>
+	<!--sensor_model>
 		<type>laser</type>
 		<laser_subsample>5</laser_subsample>
 
 		<raytrace_stepsize>1.0</raytrace_stepsize>
-		<raytrace_threshold>0.2</raytrace_threshold>
+		<raytrace_threshold>0.1</raytrace_threshold>
 		
 		<gaussian_weight>0.001</gaussian_weight>
 		<gaussian_component>
@@ -36,7 +36,7 @@
 		<exponential_coeff>-0.5</exponential_coeff>
 			
 		<max_range_weight>0</max_range_weight>
-	</sensor_model>
+	</sensor_model-->
 
 	<sensor_model>
 		<type>wall</type>
