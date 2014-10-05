@@ -30,10 +30,18 @@ namespace rspf {
 		// Initialize window
 		cv::namedWindow( windowName, CV_WINDOW_AUTOSIZE );
 		
+// 		double width = map.GetXSize();
+// 		double height = map.GetYSize();
+		double width = map.GetXSize();
+		double height = map.GetYSize();
+		
 		// Read map image
-		cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
-		for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
-			for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
+// 		cv::Mat temp = cv::Mat( map.GetXSize(), map.GetYSize(), CV_8UC3 );
+// 		for( unsigned int x = 0; x < map.GetXSize(); x++ ) {
+// 			for( unsigned int y = 0; y < map.GetYSize(); y++ ) {
+		cv::Mat temp = cv::Mat( width, height, CV_8UC3 );
+		for( unsigned int x = 0; x < width; x++ ) {
+			for( unsigned int y = 0; y < height; y++ ) {	
 				double mapVal = map.GetValue( x, y );
 				
 				if( mapVal == -1.0 ) {
@@ -49,9 +57,12 @@ namespace rspf {
 			}
 		}
 		
-		cv::Size scaledSize( std::round( map.GetXSize()*mapScale ),
-							 std::round( map.GetYSize()*mapScale ) );
-		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
+// 		cv::Size scaledSize( std::round( width*mapScale ),
+// 							 std::round( height*mapScale ) );
+// 		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );
+		cv::Size scaledSize( std::round( height*mapScale ),
+							  std::round( width*mapScale ) );
+		cv::Mat resizeTemp = cv::Mat( scaledSize.width, scaledSize.height, CV_8UC3 );		
 		resize( temp, resizeTemp, scaledSize );
 		
 		mapImage = resizeTemp.clone();
