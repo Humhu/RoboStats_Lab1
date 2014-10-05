@@ -76,7 +76,7 @@
 	</resampler>
 
 	<init_particles>100000</init_particles>
-	<num_particles>2000</num_particles>
+	<num_particles>20000</num_particles>
 </particle_filter>
 
 <filter_visualizer>

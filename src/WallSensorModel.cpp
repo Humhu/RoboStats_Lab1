@@ -24,7 +24,7 @@ namespace rspf {
 		}
 
 		double mapValue = map.GetValue( x, y );
-		if( std::abs( mapValue - 1.0 ) < 1E-6 ) {
+		if( std::abs( mapValue + 1.0 ) < 1E-6 ) {
 			particle.setW( 0 );
 		}
 		else {
