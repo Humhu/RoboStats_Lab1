@@ -1,5 +1,5 @@
 <log_reader>
-	<log_path>robotdata1.log</robot_log_path>
+	<log_path>ascii-robotdata4.log</robot_log_path>
 	<scale>0.01</scale>
 </log_reader>
 
@@ -15,9 +15,9 @@
 	
 	<sensor_model>
 		<type>laser</type>
-		<laser_subsample>1</laser_subsample>
+		<laser_subsample>6</laser_subsample>
 
-		<raytrace_stepsize>0.05</raytrace_stepsize>
+		<raytrace_stepsize>0.02</raytrace_stepsize>
 		<raytrace_threshold>0.5</raytrace_threshold>
 
 		<percent_outliers>0</percent_outliers>
@@ -85,7 +85,8 @@
 	<window_name>Filter Visualizer</window_name>
 	<map_scale>10.0</map_scale>
 	<robot_size>10.0</robot_size>
-	<particle_subsample>20</particle_subsample>
-	<show_scans>false</show_scans>
-	<make_video>false</make_video>
+	<particle_subsample>1</particle_subsample>
+	<show_scans>true</show_scans>
+	<make_video>true</make_video>
+	<video_filename>Map4_HighConfidence.avi</video_filename>
 </filter_visualizer>

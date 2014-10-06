@@ -17,6 +17,9 @@ namespace rspf {
 		showScans( ptree.get<bool>("show_scans") ), 
 		makeVideo( ptree.get<bool>("make_video") ) {
 
+		if( makeVideo ) {
+			videoFilename = ptree.get<std::string>("video_filename");
+		}
 		Initialize();
 	}
 
@@ -74,7 +77,7 @@ namespace rspf {
 			cv::Size frameSize = cv::Size( imageWidth, imageHeight );
 			double fps = 30.0;
 			// VideoWriter::VideoWriter(const string& myFile, int fourcc, double 30, Size frameSize, bool isColor=true)
-			outputVideo.open(myFile, CV_FOURCC('M','J','P','G'), fps, frameSize, true);
+			outputVideo.open(videoFilename, CV_FOURCC('M','J','P','G'), fps, frameSize, true);
 		}
 		
 	}

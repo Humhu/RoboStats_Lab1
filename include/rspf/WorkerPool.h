@@ -22,8 +22,9 @@ namespace rspf {
 		
 	protected:
 
+		boost::condition_variable_any hasJobs;
+		bool threadsRunning;
 		Mutex jobQueueMutex;
-		ConditionVariable hasJobs;
 		
 		std::deque<Job> jobQueue;
 		

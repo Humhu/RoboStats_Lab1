@@ -17,7 +17,7 @@
 		<type>laser</type>
 		<laser_subsample>1</laser_subsample>
 
-		<raytrace_stepsize>0.05</raytrace_stepsize>
+		<raytrace_stepsize>0.01</raytrace_stepsize>
 		<raytrace_threshold>0.5</raytrace_threshold>
 
 		<percent_outliers>0</percent_outliers>
@@ -78,7 +78,7 @@
 	</resampler>
 
    <init_particles>50000</init_particles>
-	<num_particles>2000</num_particles>
+	<num_particles>1000</num_particles>
 </particle_filter>
 
 <filter_visualizer>

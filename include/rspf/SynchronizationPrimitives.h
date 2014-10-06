@@ -8,7 +8,7 @@
 namespace rspf {
 
 	/*! \brief Convenient typedefs for using locks. */
-	typedef boost::mutex Mutex;
+	typedef boost::shared_mutex Mutex;
 	typedef boost::unique_lock<Mutex> Lock;
 
 	/*! \brief Basic condition variable wrapper. */
@@ -23,7 +23,7 @@ namespace rspf {
 
 	protected:
 
-		mutable boost::condition_variable cond_variable;
+		mutable boost::condition_variable_any cond_variable;
 		Mutex& mutex;
 	};
 
@@ -32,7 +32,8 @@ namespace rspf {
 	public:
 		
 		Semaphore( int startCounter );
-
+		~Semaphore();
+		
 		void Increment();
 		void Decrement();
 
@@ -40,7 +41,7 @@ namespace rspf {
 
 		mutable Mutex mutex;
 		int counter;
-		ConditionVariable hasCounters;
+		boost::condition_variable_any hasCounters;
 	};
 	
 }

@@ -22,6 +22,7 @@ namespace rspf {
     public:
 
 		ParticleFilter( const Map& _map, const PropertyTree& ptree );
+		~ParticleFilter();
 		
 		void makeParticleSet();
 		void weightParticleSet( SensorData x );

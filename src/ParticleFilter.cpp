@@ -63,6 +63,14 @@ namespace rspf {
 		}
 	}
 
+	ParticleFilter::~ParticleFilter() {
+
+		for( unsigned int i = 0; i < workers.size(); i++ ) {
+			jobsPending.Increment();
+		}
+		
+	}
+
 	void ParticleFilter::Initialize( unsigned int n )
 	{
 		// UniformDistribution( double lower, double upper );

@@ -7,6 +7,7 @@ namespace rspf {
 
 	ConditionVariable::~ConditionVariable() {
 		cond_variable.notify_all();
+		Lock lock(mutex);
 	}
 		
 	void ConditionVariable::NotifyAll() {
@@ -22,21 +23,24 @@ namespace rspf {
 	}
 
 	Semaphore::Semaphore( int startCounter ) :
-		counter( startCounter ),
-		hasCounters( mutex ) {}
+		counter( startCounter ) {}
 
+	Semaphore::~Semaphore() {
+		hasCounters.notify_all();
+	}
+		
 	void Semaphore::Increment() {
 		Lock lock( mutex );
 		
 		counter++;
-		hasCounters.NotifyAll();
+		hasCounters.notify_all();
 	}
 
 	void Semaphore::Decrement() {
 		Lock lock( mutex );
 		
 		while( counter <= 0 ) {
-			hasCounters.Wait( lock );
+			hasCounters.wait( lock );
 		}
 
 		counter--;

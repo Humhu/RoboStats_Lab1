@@ -28,6 +28,7 @@ namespace rspf {
         const std::string windowName;
 		
 		cv::VideoWriter outputVideo;
+		std::string videoFilename;
 
 		bool showScans;
 		bool makeVideo;

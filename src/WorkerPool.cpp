@@ -2,29 +2,35 @@
 
 namespace rspf {
 
-	WorkerPool::WorkerPool( unsigned int numThreads ) :
-		hasJobs( jobQueueMutex ) {
+	WorkerPool::WorkerPool( unsigned int numThreads ) {
 		Initialize( numThreads );
 	}
 
-	WorkerPool::WorkerPool( const PropertyTree& ptree ) :
-		hasJobs( jobQueueMutex ) {
+	WorkerPool::WorkerPool( const PropertyTree& ptree ) {
 		Initialize( ptree.get<unsigned int>("num_threads") );
 	}
 		
 
 	WorkerPool::~WorkerPool() {
-		workerThreads.interrupt_all();
+
+		Lock lock( jobQueueMutex );
+		threadsRunning = false;
+		lock.unlock();
+		
+		hasJobs.notify_all();
+//  		workerThreads.interrupt_all();
+		workerThreads.join_all();
 	}
 		
 	void WorkerPool::EnqueueJob( const Job& job ) {
 		Lock lock( jobQueueMutex );
 
 		jobQueue.push_back( job );
-		hasJobs.NotifyAll();
+		hasJobs.notify_all();
 	}
 
 	void WorkerPool::Initialize( unsigned int numThreads ) {
+		threadsRunning = true;
 		for( unsigned int i = 0; i < numThreads; i++ ) {
 			
 			// NOTE Mixing std::bind and boost::threads
@@ -38,20 +44,23 @@ namespace rspf {
 	
 	void WorkerPool::WorkerLoop() {
 
-		while( true ) {
-			Job job = WaitOnJob();
-			job();
-		}
-	}
+		try {
+			while( true ) {
+				Lock lock( jobQueueMutex );
 
-	WorkerPool::Job WorkerPool::WaitOnJob() {
-		Lock lock( jobQueueMutex );
-		while( jobQueue.empty() ) {
-			hasJobs.Wait( lock );
-		}
-		Job job = jobQueue.front();
-		jobQueue.pop_front();
-		return job;
-	}
-	
+				while( threadsRunning && jobQueue.empty() ) {
+					hasJobs.wait( lock );
+				}
+
+				if( !threadsRunning ) {
+// 					std::cout << "Thread no longer running. Bailing out!" << std::endl;
+					return;
+				}
+				
+				Job job = jobQueue.front();
+				jobQueue.pop_front();
+				job();
+			}
+		} catch( std::exception e ) {}
+	}	
 }
