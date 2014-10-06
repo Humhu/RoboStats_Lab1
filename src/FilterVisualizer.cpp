@@ -78,6 +78,21 @@ namespace rspf {
 		}
 		
 	}
+
+	void FilterVisualizer::Update() {
+		currentImage = mapImage.clone();
+		std::vector<Particle> particles = filter.GetParticles();
+		PlotRobotPoses( currentImage, particles );
+		cv::imshow( windowName, currentImage );
+		
+		if( showScans && lastData ) {
+			PlotScans( currentImage, particles, *lastData );
+		}
+		
+		if( makeVideo ) {
+			outputVideo.write( currentImage );
+		}
+	}
  
     void FilterVisualizer::Update( const SensorData& data ) {
 

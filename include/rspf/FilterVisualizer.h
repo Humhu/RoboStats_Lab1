@@ -17,7 +17,8 @@ namespace rspf {
 		FilterVisualizer( ParticleFilter& filter, const Map& map, const PropertyTree& ptree );
 
 		void ShowRaytraces( const std::vector< std::vector<double> >& rays );
-		
+
+		void Update();
         void Update( const SensorData& data );
         
     protected:

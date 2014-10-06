@@ -29,6 +29,8 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Initializing log reader..." << std::endl;
     RobotLogReader log( ptree.get_child("log_reader") );
 
+	vis.Update(); // Capture first frame
+	
 	unsigned int lineNumber = 0;
     while( log.HasData() ) {
 
