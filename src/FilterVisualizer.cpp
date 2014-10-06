@@ -1,5 +1,5 @@
 #include "rspf/FilterVisualizer.h"
-
+#include "rspf/Timer.h"
 #include <opencv2/imgproc/imgproc.hpp>
 
 namespace rspf {
@@ -14,11 +14,18 @@ namespace rspf {
 		mapScale( ptree.get<double>("map_scale") ),
 		robotSize( ptree.get<double>("robot_size") ),
 		particleSubsample( ptree.get<double>("particle_subsample") ),
-		showScans( ptree.get<bool>("show_scans") ) {
+		showScans( ptree.get<bool>("show_scans") ), 
+		makeVideo( ptree.get<bool>("make_video") ) {
 
 		Initialize();
 	}
 
+// 	FilterVisualizer::~FilterVisualizer(){
+// 		if( outputVideo.isOpened() ){
+// 			outputVideo.close
+// 		}
+// 	}//de-c0nstruct-z0r
+	
     void FilterVisualizer::Initialize() {
 
 		// TODO Possible race condition here if parallelized construction
@@ -54,6 +61,22 @@ namespace rspf {
 			}
 		}
 		
+		if( makeVideo ) {
+			// TODO open videoWriter
+		
+			std::stringstream ss;
+			Timer myTimer;
+			Time fooTime = myTimer.GetTime();
+
+			ss << fooTime;
+						
+			const std::string myFile = "vid" + ss.str() + ".avi";
+			cv::Size frameSize = cv::Size( imageWidth, imageHeight );
+			double fps = 30.0;
+			// VideoWriter::VideoWriter(const string& myFile, int fourcc, double 30, Size frameSize, bool isColor=true)
+			outputVideo.open(myFile, CV_FOURCC('M','J','P','G'), fps, frameSize, true);
+		}
+		
 	}
  
     void FilterVisualizer::Update( const SensorData& data ) {
@@ -83,8 +106,14 @@ namespace rspf {
         PlotRobotPoses( currentImage, particles );
 
         cv::imshow( windowName, currentImage );
+		
+		if( makeVideo ) {
+			// // TODO videoWriter::write
+			// // outputVideo << res;  
+			outputVideo.write( currentImage ); 
+		}
     }
-
+/*
 // 	void FilterVisualizer::ShowRaytraces( const std::vector< std::vector<double> >& rays ) {
 // 
 // 		std::vector<Particle> particles = filter.GetParticles();
@@ -125,7 +154,7 @@ namespace rspf {
 // 		cv::fillPoly( currentImage, shapes, numPoints, numToPlot, CV_RGB( 0, 255, 0 ), 8 );
 // 		
 // 	}
-    
+*/    
     void FilterVisualizer::PlotScans( cv::Mat& img, const std::vector<Particle>& particles, const SensorData& data ) {
 
 		unsigned int numPoses = particles.size();

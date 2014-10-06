@@ -15,14 +15,14 @@
 	
 	<sensor_model>
 		<type>laser</type>
-		<laser_subsample>6</laser_subsample>
+		<laser_subsample>1</laser_subsample>
 
 		<raytrace_stepsize>0.01</raytrace_stepsize>
 		<raytrace_threshold>0.5</raytrace_threshold>
 
 		<percent_outliers>0</percent_outliers>
 		
-		<gaussian_weight>2</gaussian_weight>
+		<gaussian_weight>5</gaussian_weight>
 		<gaussian_variance_scale>0.0</gaussian_variance_scale>
 		<gaussian_component>
 			<mean>0</mean>
@@ -85,6 +85,7 @@
 	<window_name>Filter Visualizer</window_name>
 	<map_scale>10.0</map_scale>
 	<robot_size>10.0</robot_size>
-	<particle_subsample>10</particle_subsample>
+	<particle_subsample>1</particle_subsample>
 	<show_scans>true</show_scans>
+	<make_video>true</make_video>
 </filter_visualizer>

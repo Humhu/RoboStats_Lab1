@@ -25,8 +25,11 @@ namespace rspf {
         ParticleFilter& filter;
         const Map& map;
         const std::string windowName;
+		
+		cv::VideoWriter outputVideo;
 
 		bool showScans;
+		bool makeVideo;
         double mapScale; // Scale from Map dimensions
         double robotSize; // Size in pixels
         double particleSubsample;
