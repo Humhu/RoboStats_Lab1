@@ -75,7 +75,7 @@ namespace rspf {
 						
 			const std::string myFile = "vid" + ss.str() + ".avi";
 			cv::Size frameSize = cv::Size( imageWidth, imageHeight );
-			double fps = 30.0;
+			double fps = 1.0;
 			// VideoWriter::VideoWriter(const string& myFile, int fourcc, double 30, Size frameSize, bool isColor=true)
 			outputVideo.open(videoFilename, CV_FOURCC('M','J','P','G'), fps, frameSize, true);
 		}
