@@ -66,13 +66,13 @@ namespace rspf {
 			
 		} // end find-cumlative-probability-of-every-laser-beam-for-this-particle
 
-// 		std::sort( probs.begin(), probs.end() );
-// 		for( unsigned int i = numProbsToSkip; i < numPoints; i++ ) {
-// 			cumProb = cumProb * probs[i];
-// 		}
-		for( unsigned int i = 0; i < probs.size(); i++ ) {
-			cumProb += probs[i];
+		std::sort( probs.begin(), probs.end() );
+		for( unsigned int i = numProbsToSkip; i < numPoints; i++ ) {
+			cumProb = cumProb * probs[i];
 		}
+// 		for( unsigned int i = 0; i < probs.size(); i++ ) {
+// 			cumProb += probs[i];
+// 		}
 	
 		particle.setW( cumProb * particle.getW() ); // update the particle weight
 				
