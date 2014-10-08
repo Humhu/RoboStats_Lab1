@@ -12,39 +12,39 @@
 	<workers>
 		<num_threads>4</num_threads>
 	</workers>
-	
-	<sensor_model>
-		<type>laser</type>
-		<laser_subsample>6</laser_subsample>
 
-		<raytrace_stepsize>0.02</raytrace_stepsize>
-		<raytrace_threshold>0.5</raytrace_threshold>
-
-		<percent_outliers>0</percent_outliers>
-		
-		<gaussian_weight>2</gaussian_weight>
-		<gaussian_variance_scale>0.0</gaussian_variance_scale>
-		<gaussian_component>
-			<mean>0</mean>
-			<variance>1</variance>
-		</gaussian_component>
-		
-		<uniform_weight>50</uniform_weight>
-		<uniform_component>
-			<lower_bound>0</lower_bound>
-			<upper_bound>820</upper_bound>
-		</uniform_component>
-		
-		<exponential_weight>0</exponential_weight>
-		<exponential_coeff>-0.5</exponential_coeff>
-			
-		<max_range_weight>0</max_range_weight>
-	</sensor_model>
+   <sensor_model>
+	   <type>laser</type>
+	   <laser_subsample>6</laser_subsample>
+	   
+	   <raytrace_stepsize>0.01</raytrace_stepsize>
+	   <raytrace_threshold>0.1</raytrace_threshold>
+	   
+	   <percent_outliers>0.05</percent_outliers>
+	   
+	   <gaussian_weight>0.25</gaussian_weight>
+	   <gaussian_variance_scale>0.1</gaussian_variance_scale>
+	   <gaussian_component>
+		   <mean>0</mean>
+		   <variance>1</variance>
+	   </gaussian_component>
+	   
+	   <uniform_weight>25</uniform_weight>
+	   <uniform_component>
+		   <lower_bound>0</lower_bound>
+		   <upper_bound>820</upper_bound>
+	   </uniform_component>
+	   
+	   <exponential_weight>0</exponential_weight>
+	   <exponential_coeff>-0.5</exponential_coeff>
+	   
+	   <max_range_weight>0</max_range_weight>
+   </sensor_model>
 
 	<sensor_model>
 		<type>wall</type>
 	</sensor_model>
-	
+
 	<transition_model>
 		<type>default</type>
 		<x_noise>
@@ -60,7 +60,7 @@
 			<variance>0</variance>
 		</th_noise>
 	</transition_model>
-	
+	   
 	<resampler>
 		<type>low_variance</type>
 		<x_noise>
@@ -69,24 +69,24 @@
 		</x_noise>
 		<y_noise>
 			<mean>0</mean>
-			<variance>0.05</variance>
+			<variance>0.015</variance>
 		</y_noise>
 		<th_noise>
 			<mean>0</mean>
-			<variance>0.001</variance>
+			<variance>0.05</variance>
 		</th_noise>
 	</resampler>
 
-   <init_particles>50000</init_particles>
-	<num_particles>2000</num_particles>
+	<init_particles>50000</init_particles>
+	<num_particles>1000</num_particles>
 </particle_filter>
 
 <filter_visualizer>
 	<window_name>Filter Visualizer</window_name>
 	<map_scale>10.0</map_scale>
 	<robot_size>10.0</robot_size>
-	<particle_subsample>2000</particle_subsample>
-	<show_scans>true</show_scans>
+	<particle_subsample>1</particle_subsample>
+	<show_scans>false</show_scans>
 	<make_video>true</make_video>
 	<video_filename>Map4_Standard.avi</video_filename>
 </filter_visualizer>
